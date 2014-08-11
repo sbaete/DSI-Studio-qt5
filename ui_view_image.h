@@ -11,21 +11,21 @@
 #define UI_VIEW_IMAGE_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QPlainTextEdit>
-#include <QtGui/QSlider>
-#include <QtGui/QTabWidget>
-#include <QtGui/QToolButton>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGraphicsView>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QPlainTextEdit>
+#include <QSlider>
+#include <QTabWidget>
+#include <QToolButton>
+#include <QVBoxLayout>
+#include <QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -164,14 +164,14 @@ public:
 
     void retranslateUi(QDialog *view_image)
     {
-        view_image->setWindowTitle(QApplication::translate("view_image", "Dialog", 0, QApplication::UnicodeUTF8));
-        image_info->setText(QApplication::translate("view_image", "Image Info", 0, QApplication::UnicodeUTF8));
-        zoom_in->setText(QApplication::translate("view_image", "+", 0, QApplication::UnicodeUTF8));
-        zoom_out->setText(QApplication::translate("view_image", "-", 0, QApplication::UnicodeUTF8));
-        label_3->setText(QApplication::translate("view_image", "Contrast", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("view_image", "Brightness", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("view_image", "Image", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("view_image", "Information", 0, QApplication::UnicodeUTF8));
+        view_image->setWindowTitle(QApplication::translate("view_image", "Dialog", 0));
+        image_info->setText(QApplication::translate("view_image", "Image Info", 0));
+        zoom_in->setText(QApplication::translate("view_image", "+", 0));
+        zoom_out->setText(QApplication::translate("view_image", "-", 0));
+        label_3->setText(QApplication::translate("view_image", "Contrast", 0));
+        label_2->setText(QApplication::translate("view_image", "Brightness", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("view_image", "Image", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("view_image", "Information", 0));
     } // retranslateUi
 
 };

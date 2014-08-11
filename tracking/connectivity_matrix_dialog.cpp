@@ -60,7 +60,7 @@ void connectivity_matrix_dialog::mouse_move(QMouseEvent *mouseEvent)
         QGraphicsTextItem *x_text = scene.addText(data.region_name[x].c_str());
         QGraphicsTextItem *y_text = scene.addText(data.region_name[y].c_str());
         x_text->moveBy(point.x()-x_text->boundingRect().width()/2,-x_text->boundingRect().height());
-        y_text->rotate(270);
+        y_text->setRotation(270.0);
         y_text->moveBy(-y_text->boundingRect().height(),point.y()+y_text->boundingRect().width()/2);
     }
 

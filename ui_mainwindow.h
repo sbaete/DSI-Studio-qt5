@@ -11,21 +11,22 @@
 #define UI_MAINWINDOW_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QComboBox>
-#include <QtGui/QCommandLinkButton>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QMainWindow>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QTableWidget>
-#include <QtGui/QToolBox>
-#include <QtGui/QToolButton>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QComboBox>
+#include <QCommandLinkButton>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QMainWindow>
+#include <QSpacerItem>
+#include <QTableWidget>
+#include <QToolBox>
+#include <QToolButton>
+#include <QVBoxLayout>
+#include <QWidget>
+#include <QtWidgets>
 
 QT_BEGIN_NAMESPACE
 
@@ -328,50 +329,50 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "DSI Studio", 0, QApplication::UnicodeUTF8));
-        OpenDICOM->setText(QApplication::translate("MainWindow", "STEP1: Open Source Images", 0, QApplication::UnicodeUTF8));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "DSI Studio", 0));
+        OpenDICOM->setText(QApplication::translate("MainWindow", "STEP1: Open Source Images", 0));
         OpenDICOM->setDescription(QApplication::translate("MainWindow", "Open diffusion MR images to create .src file\n"
-"(DICOM, NIFTI, Bruker 2dseq, Varian fdf) ", 0, QApplication::UnicodeUTF8));
-        Reconstruction->setText(QApplication::translate("MainWindow", "STEP2: Reconstruction", 0, QApplication::UnicodeUTF8));
+"(DICOM, NIFTI, Bruker 2dseq, Varian fdf) ", 0));
+        Reconstruction->setText(QApplication::translate("MainWindow", "STEP2: Reconstruction", 0));
         Reconstruction->setDescription(QApplication::translate("MainWindow", "Open .src file to do reconstructiong\n"
-"(DTI, QBI, DSI, GQI, or QSDR)", 0, QApplication::UnicodeUTF8));
-        FiberTracking->setText(QApplication::translate("MainWindow", "STEP3: Fiber tracking", 0, QApplication::UnicodeUTF8));
+"(DTI, QBI, DSI, GQI, or QSDR)", 0));
+        FiberTracking->setText(QApplication::translate("MainWindow", "STEP3: Fiber tracking", 0));
         FiberTracking->setDescription(QApplication::translate("MainWindow", "Open .fib file to perform fiber tracking and analysis\n"
 "(track-specific analysis, connectivity matrix) \n"
-"", 0, QApplication::UnicodeUTF8));
-        toolBox->setItemText(toolBox->indexOf(page), QApplication::translate("MainWindow", "Diffusion MRI Tractography", 0, QApplication::UnicodeUTF8));
-        averagefib->setText(QApplication::translate("MainWindow", "STEP1: Create template/skeleton", 0, QApplication::UnicodeUTF8));
-        averagefib->setDescription(QApplication::translate("MainWindow", "Average the ODFs to create a tempalte or skeleton. You need to use QSDR to reconstruct src files and check \"output ODF\" in the reconstruction", 0, QApplication::UnicodeUTF8));
-        vbc->setText(QApplication::translate("MainWindow", "STEP2: Create connectometry database", 0, QApplication::UnicodeUTF8));
-        vbc->setDescription(QApplication::translate("MainWindow", "Load a group of subjects to create a connectometry dataset", 0, QApplication::UnicodeUTF8));
-        connectometry->setText(QApplication::translate("MainWindow", "STEP3: Connectometry Analysis ", 0, QApplication::UnicodeUTF8));
-        toolBox->setItemText(toolBox->indexOf(page_2), QApplication::translate("MainWindow", "Diffusion MRI Connectometry", 0, QApplication::UnicodeUTF8));
-        RenameDICOM->setText(QApplication::translate("MainWindow", "Rename DICOM Files", 0, QApplication::UnicodeUTF8));
-        RenameDICOM->setDescription(QApplication::translate("MainWindow", "Sort and rename DICOM files according to their sequences", 0, QApplication::UnicodeUTF8));
-        RenameDICOMDir->setText(QApplication::translate("MainWindow", "Rename DICOM Files", 0, QApplication::UnicodeUTF8));
-        RenameDICOMDir->setDescription(QApplication::translate("MainWindow", "Select a directory containinng DICOM files and rename them by their sequence", 0, QApplication::UnicodeUTF8));
-        batch_src->setText(QApplication::translate("MainWindow", "Create SRC files ", 0, QApplication::UnicodeUTF8));
-        batch_src->setDescription(QApplication::translate("MainWindow", "Select a root directory that contains multiple subdirectory and generate an SRC file for each of them.", 0, QApplication::UnicodeUTF8));
-        batch_reconstruction->setText(QApplication::translate("MainWindow", "Batch SRC Reconstruction", 0, QApplication::UnicodeUTF8));
-        batch_reconstruction->setDescription(QApplication::translate("MainWindow", "Select a directory that contains SRC files in the subdirectories and performan reconstruction.", 0, QApplication::UnicodeUTF8));
-        toolBox->setItemText(toolBox->indexOf(page_3), QApplication::translate("MainWindow", "Tools: batch processing", 0, QApplication::UnicodeUTF8));
-        view_image->setText(QApplication::translate("MainWindow", "View Images (NIFTI/DICOM/2dseq)", 0, QApplication::UnicodeUTF8));
-        view_image->setDescription(QApplication::translate("MainWindow", "Open image and header information", 0, QApplication::UnicodeUTF8));
-        simulateMRI->setText(QApplication::translate("MainWindow", "Diffusion MRI Simulation", 0, QApplication::UnicodeUTF8));
-        simulateMRI->setDescription(QApplication::translate("MainWindow", "Simulate diffusion images using the given b-table", 0, QApplication::UnicodeUTF8));
-        toolBox->setItemText(toolBox->indexOf(page_4), QApplication::translate("MainWindow", "Tools: others", 0, QApplication::UnicodeUTF8));
-        label_3->setText(QApplication::translate("MainWindow", "Recent src files: double click to open", 0, QApplication::UnicodeUTF8));
+"", 0));
+        toolBox->setItemText(toolBox->indexOf(page), QApplication::translate("MainWindow", "Diffusion MRI Tractography", 0));
+        averagefib->setText(QApplication::translate("MainWindow", "STEP1: Create template/skeleton", 0));
+        averagefib->setDescription(QApplication::translate("MainWindow", "Average the ODFs to create a tempalte or skeleton. You need to use QSDR to reconstruct src files and check \"output ODF\" in the reconstruction", 0));
+        vbc->setText(QApplication::translate("MainWindow", "STEP2: Create connectometry database", 0));
+        vbc->setDescription(QApplication::translate("MainWindow", "Load a group of subjects to create a connectometry dataset", 0));
+        connectometry->setText(QApplication::translate("MainWindow", "STEP3: Connectometry Analysis ", 0));
+        toolBox->setItemText(toolBox->indexOf(page_2), QApplication::translate("MainWindow", "Diffusion MRI Connectometry", 0));
+        RenameDICOM->setText(QApplication::translate("MainWindow", "Rename DICOM Files", 0));
+        RenameDICOM->setDescription(QApplication::translate("MainWindow", "Sort and rename DICOM files according to their sequences", 0));
+        RenameDICOMDir->setText(QApplication::translate("MainWindow", "Rename DICOM Files", 0));
+        RenameDICOMDir->setDescription(QApplication::translate("MainWindow", "Select a directory containinng DICOM files and rename them by their sequence", 0));
+        batch_src->setText(QApplication::translate("MainWindow", "Create SRC files ", 0));
+        batch_src->setDescription(QApplication::translate("MainWindow", "Select a root directory that contains multiple subdirectory and generate an SRC file for each of them.", 0));
+        batch_reconstruction->setText(QApplication::translate("MainWindow", "Batch SRC Reconstruction", 0));
+        batch_reconstruction->setDescription(QApplication::translate("MainWindow", "Select a directory that contains SRC files in the subdirectories and performan reconstruction.", 0));
+        toolBox->setItemText(toolBox->indexOf(page_3), QApplication::translate("MainWindow", "Tools: batch processing", 0));
+        view_image->setText(QApplication::translate("MainWindow", "View Images (NIFTI/DICOM/2dseq)", 0));
+        view_image->setDescription(QApplication::translate("MainWindow", "Open image and header information", 0));
+        simulateMRI->setText(QApplication::translate("MainWindow", "Diffusion MRI Simulation", 0));
+        simulateMRI->setDescription(QApplication::translate("MainWindow", "Simulate diffusion images using the given b-table", 0));
+        toolBox->setItemText(toolBox->indexOf(page_4), QApplication::translate("MainWindow", "Tools: others", 0));
+        label_3->setText(QApplication::translate("MainWindow", "Recent src files: double click to open", 0));
         QTableWidgetItem *___qtablewidgetitem = recentSrc->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "File Name", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "File Name", 0));
         QTableWidgetItem *___qtablewidgetitem1 = recentSrc->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QApplication::translate("MainWindow", "Directory", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("MainWindow", "Recent fib files: double click to open", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem1->setText(QApplication::translate("MainWindow", "Directory", 0));
+        label_2->setText(QApplication::translate("MainWindow", "Recent fib files: double click to open", 0));
         QTableWidgetItem *___qtablewidgetitem2 = recentFib->horizontalHeaderItem(0);
-        ___qtablewidgetitem2->setText(QApplication::translate("MainWindow", "File Name", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem2->setText(QApplication::translate("MainWindow", "File Name", 0));
         QTableWidgetItem *___qtablewidgetitem3 = recentFib->horizontalHeaderItem(1);
-        ___qtablewidgetitem3->setText(QApplication::translate("MainWindow", "Directory", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("MainWindow", "Working Directory", 0, QApplication::UnicodeUTF8));
-        browseDir->setText(QApplication::translate("MainWindow", "Browse...", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem3->setText(QApplication::translate("MainWindow", "Directory", 0));
+        label->setText(QApplication::translate("MainWindow", "Working Directory", 0));
+        browseDir->setText(QApplication::translate("MainWindow", "Browse...", 0));
     } // retranslateUi
 
 };

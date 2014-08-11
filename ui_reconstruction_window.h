@@ -11,33 +11,33 @@
 #define UI_RECONSTRUCTION_WINDOW_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QCheckBox>
-#include <QtGui/QComboBox>
-#include <QtGui/QCommandLinkButton>
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QGridLayout>
-#include <QtGui/QGroupBox>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QMainWindow>
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QPushButton>
-#include <QtGui/QRadioButton>
-#include <QtGui/QSlider>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QSpinBox>
-#include <QtGui/QSplitter>
-#include <QtGui/QTableWidget>
-#include <QtGui/QToolBox>
-#include <QtGui/QToolButton>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QCommandLinkButton>
+#include <QDoubleSpinBox>
+#include <QGraphicsView>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QMainWindow>
+#include <QMenu>
+#include <QMenuBar>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QSlider>
+#include <QSpacerItem>
+#include <QSpinBox>
+#include <QSplitter>
+#include <QTableWidget>
+#include <QToolBox>
+#include <QToolButton>
+#include <QVBoxLayout>
+#include <QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -1099,119 +1099,119 @@ public:
 
     void retranslateUi(QMainWindow *reconstruction_window)
     {
-        reconstruction_window->setWindowTitle(QApplication::translate("reconstruction_window", "Reconstruction", 0, QApplication::UnicodeUTF8));
-        actionSave_4D_nifti->setText(QApplication::translate("reconstruction_window", "Save 4D nifti...", 0, QApplication::UnicodeUTF8));
-        actionSave_b_table->setText(QApplication::translate("reconstruction_window", "Save b-table...", 0, QApplication::UnicodeUTF8));
-        actionSave_bvals->setText(QApplication::translate("reconstruction_window", "Save bvals...", 0, QApplication::UnicodeUTF8));
-        actionSave_bvecs->setText(QApplication::translate("reconstruction_window", "Save bvecs...", 0, QApplication::UnicodeUTF8));
-        actionFlip_x->setText(QApplication::translate("reconstruction_window", "Flip x", 0, QApplication::UnicodeUTF8));
-        actionFlip_y->setText(QApplication::translate("reconstruction_window", "Flip y", 0, QApplication::UnicodeUTF8));
-        actionFlip_z->setText(QApplication::translate("reconstruction_window", "Flip z", 0, QApplication::UnicodeUTF8));
-        actionFlip_xy->setText(QApplication::translate("reconstruction_window", "Swap x y", 0, QApplication::UnicodeUTF8));
-        actionFlip_xz->setText(QApplication::translate("reconstruction_window", "Swap x z", 0, QApplication::UnicodeUTF8));
-        actionFlip_yz->setText(QApplication::translate("reconstruction_window", "Swap y z", 0, QApplication::UnicodeUTF8));
-        actionRotate->setText(QApplication::translate("reconstruction_window", "Rotate...", 0, QApplication::UnicodeUTF8));
-        actionTrim_image->setText(QApplication::translate("reconstruction_window", "Trim image", 0, QApplication::UnicodeUTF8));
-        delete_2->setText(QApplication::translate("reconstruction_window", "Delete", 0, QApplication::UnicodeUTF8));
+        reconstruction_window->setWindowTitle(QApplication::translate("reconstruction_window", "Reconstruction", 0));
+        actionSave_4D_nifti->setText(QApplication::translate("reconstruction_window", "Save 4D nifti...", 0));
+        actionSave_b_table->setText(QApplication::translate("reconstruction_window", "Save b-table...", 0));
+        actionSave_bvals->setText(QApplication::translate("reconstruction_window", "Save bvals...", 0));
+        actionSave_bvecs->setText(QApplication::translate("reconstruction_window", "Save bvecs...", 0));
+        actionFlip_x->setText(QApplication::translate("reconstruction_window", "Flip x", 0));
+        actionFlip_y->setText(QApplication::translate("reconstruction_window", "Flip y", 0));
+        actionFlip_z->setText(QApplication::translate("reconstruction_window", "Flip z", 0));
+        actionFlip_xy->setText(QApplication::translate("reconstruction_window", "Swap x y", 0));
+        actionFlip_xz->setText(QApplication::translate("reconstruction_window", "Swap x z", 0));
+        actionFlip_yz->setText(QApplication::translate("reconstruction_window", "Swap y z", 0));
+        actionRotate->setText(QApplication::translate("reconstruction_window", "Rotate...", 0));
+        actionTrim_image->setText(QApplication::translate("reconstruction_window", "Trim image", 0));
+        delete_2->setText(QApplication::translate("reconstruction_window", "Delete", 0));
         QTableWidgetItem *___qtablewidgetitem = b_table->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("reconstruction_window", "b value", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem->setText(QApplication::translate("reconstruction_window", "b value", 0));
         QTableWidgetItem *___qtablewidgetitem1 = b_table->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QApplication::translate("reconstruction_window", "bx", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem1->setText(QApplication::translate("reconstruction_window", "bx", 0));
         QTableWidgetItem *___qtablewidgetitem2 = b_table->horizontalHeaderItem(2);
-        ___qtablewidgetitem2->setText(QApplication::translate("reconstruction_window", "by", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem2->setText(QApplication::translate("reconstruction_window", "by", 0));
         QTableWidgetItem *___qtablewidgetitem3 = b_table->horizontalHeaderItem(3);
-        ___qtablewidgetitem3->setText(QApplication::translate("reconstruction_window", "bz", 0, QApplication::UnicodeUTF8));
-        zoom_in->setText(QApplication::translate("reconstruction_window", "+", 0, QApplication::UnicodeUTF8));
-        zoom_out->setText(QApplication::translate("reconstruction_window", "-", 0, QApplication::UnicodeUTF8));
-        label_14->setText(QApplication::translate("reconstruction_window", "Contrast", 0, QApplication::UnicodeUTF8));
-        label_13->setText(QApplication::translate("reconstruction_window", "Brightness", 0, QApplication::UnicodeUTF8));
-        toolBox->setItemText(toolBox->indexOf(source_page), QApplication::translate("reconstruction_window", "Source Images", 0, QApplication::UnicodeUTF8));
-        load_mask->setText(QApplication::translate("reconstruction_window", "Open...", 0, QApplication::UnicodeUTF8));
-        save_mask->setText(QApplication::translate("reconstruction_window", "Save...", 0, QApplication::UnicodeUTF8));
-        thresholding->setText(QApplication::translate("reconstruction_window", "Thresholding", 0, QApplication::UnicodeUTF8));
-        dilation->setText(QApplication::translate("reconstruction_window", "Dilation", 0, QApplication::UnicodeUTF8));
-        erosion->setText(QApplication::translate("reconstruction_window", "Erosion", 0, QApplication::UnicodeUTF8));
-        smoothing->setText(QApplication::translate("reconstruction_window", "Smoothing", 0, QApplication::UnicodeUTF8));
-        defragment->setText(QApplication::translate("reconstruction_window", "Defragment", 0, QApplication::UnicodeUTF8));
-        remove_background->setText(QApplication::translate("reconstruction_window", "Remove background", 0, QApplication::UnicodeUTF8));
-        toolBox->setItemText(toolBox->indexOf(page_3), QApplication::translate("reconstruction_window", "Step 1: setup brain mask", 0, QApplication::UnicodeUTF8));
-        groupBox->setTitle(QApplication::translate("reconstruction_window", "Reconstruction Method", 0, QApplication::UnicodeUTF8));
-        DTI->setText(QApplication::translate("reconstruction_window", "DTI", 0, QApplication::UnicodeUTF8));
-        DSI->setText(QApplication::translate("reconstruction_window", "DSI", 0, QApplication::UnicodeUTF8));
-        QBI->setText(QApplication::translate("reconstruction_window", "QBI", 0, QApplication::UnicodeUTF8));
-        HARDI->setText(QApplication::translate("reconstruction_window", "Convert to HARDI", 0, QApplication::UnicodeUTF8));
-        GQI->setText(QApplication::translate("reconstruction_window", "GQI", 0, QApplication::UnicodeUTF8));
-        QDif->setText(QApplication::translate("reconstruction_window", "QSDR", 0, QApplication::UnicodeUTF8));
-        label_5->setText(QApplication::translate("reconstruction_window", "DSI Hamming filter", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("reconstruction_window", "SH order", 0, QApplication::UnicodeUTF8));
-        label_6->setText(QApplication::translate("reconstruction_window", "QBI Regularization", 0, QApplication::UnicodeUTF8));
-        label_7->setText(QApplication::translate("reconstruction_window", "Diffusion sampling length ratio", 0, QApplication::UnicodeUTF8));
-        label_19->setText(QApplication::translate("reconstruction_window", "diffusion time:", 0, QApplication::UnicodeUTF8));
-        label_18->setText(QApplication::translate("reconstruction_window", "ms", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem3->setText(QApplication::translate("reconstruction_window", "bz", 0));
+        zoom_in->setText(QApplication::translate("reconstruction_window", "+", 0));
+        zoom_out->setText(QApplication::translate("reconstruction_window", "-", 0));
+        label_14->setText(QApplication::translate("reconstruction_window", "Contrast", 0));
+        label_13->setText(QApplication::translate("reconstruction_window", "Brightness", 0));
+        toolBox->setItemText(toolBox->indexOf(source_page), QApplication::translate("reconstruction_window", "Source Images", 0));
+        load_mask->setText(QApplication::translate("reconstruction_window", "Open...", 0));
+        save_mask->setText(QApplication::translate("reconstruction_window", "Save...", 0));
+        thresholding->setText(QApplication::translate("reconstruction_window", "Thresholding", 0));
+        dilation->setText(QApplication::translate("reconstruction_window", "Dilation", 0));
+        erosion->setText(QApplication::translate("reconstruction_window", "Erosion", 0));
+        smoothing->setText(QApplication::translate("reconstruction_window", "Smoothing", 0));
+        defragment->setText(QApplication::translate("reconstruction_window", "Defragment", 0));
+        remove_background->setText(QApplication::translate("reconstruction_window", "Remove background", 0));
+        toolBox->setItemText(toolBox->indexOf(page_3), QApplication::translate("reconstruction_window", "Step 1: setup brain mask", 0));
+        groupBox->setTitle(QApplication::translate("reconstruction_window", "Reconstruction Method", 0));
+        DTI->setText(QApplication::translate("reconstruction_window", "DTI", 0));
+        DSI->setText(QApplication::translate("reconstruction_window", "DSI", 0));
+        QBI->setText(QApplication::translate("reconstruction_window", "QBI", 0));
+        HARDI->setText(QApplication::translate("reconstruction_window", "Convert to HARDI", 0));
+        GQI->setText(QApplication::translate("reconstruction_window", "GQI", 0));
+        QDif->setText(QApplication::translate("reconstruction_window", "QSDR", 0));
+        label_5->setText(QApplication::translate("reconstruction_window", "DSI Hamming filter", 0));
+        label->setText(QApplication::translate("reconstruction_window", "SH order", 0));
+        label_6->setText(QApplication::translate("reconstruction_window", "QBI Regularization", 0));
+        label_7->setText(QApplication::translate("reconstruction_window", "Diffusion sampling length ratio", 0));
+        label_19->setText(QApplication::translate("reconstruction_window", "diffusion time:", 0));
+        label_18->setText(QApplication::translate("reconstruction_window", "ms", 0));
         ODFDef->clear();
         ODFDef->insertItems(0, QStringList()
-         << QApplication::translate("reconstruction_window", "No distance weighting", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("reconstruction_window", "r-squared weighted", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("reconstruction_window", "No distance weighting", 0)
+         << QApplication::translate("reconstruction_window", "r-squared weighted", 0)
         );
         ResolutionBox->setTitle(QString());
-        label_15->setText(QApplication::translate("reconstruction_window", "Registration method", 0, QApplication::UnicodeUTF8));
+        label_15->setText(QApplication::translate("reconstruction_window", "Registration method", 0));
         reg_method->clear();
         reg_method->insertItems(0, QStringList()
-         << QApplication::translate("reconstruction_window", "norm  7-9-7", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("reconstruction_window", "norm 14-18-14", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("reconstruction_window", "norm 21-27-21", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("reconstruction_window", "norm  7-9-7", 0)
+         << QApplication::translate("reconstruction_window", "norm 14-18-14", 0)
+         << QApplication::translate("reconstruction_window", "norm 21-27-21", 0)
         );
-        manual_reg->setText(QApplication::translate("reconstruction_window", "...", 0, QApplication::UnicodeUTF8));
-        label_8->setText(QApplication::translate("reconstruction_window", "Output Resolution", 0, QApplication::UnicodeUTF8));
+        manual_reg->setText(QApplication::translate("reconstruction_window", "...", 0));
+        label_8->setText(QApplication::translate("reconstruction_window", "Output Resolution", 0));
         hardi_param->setTitle(QString());
-        label_16->setText(QApplication::translate("reconstruction_window", "Output b-value", 0, QApplication::UnicodeUTF8));
-        label_17->setText(QApplication::translate("reconstruction_window", "Regularization parameter", 0, QApplication::UnicodeUTF8));
-        b_table_label->setText(QApplication::translate("reconstruction_window", "B-table (optional)", 0, QApplication::UnicodeUTF8));
-        load_b_table->setText(QApplication::translate("reconstruction_window", "...", 0, QApplication::UnicodeUTF8));
-        AdvancedOptions->setText(QApplication::translate("reconstruction_window", "Advanced Options >>", 0, QApplication::UnicodeUTF8));
-        ODFSharpening->setTitle(QApplication::translate("reconstruction_window", "ODF Sharpening", 0, QApplication::UnicodeUTF8));
+        label_16->setText(QApplication::translate("reconstruction_window", "Output b-value", 0));
+        label_17->setText(QApplication::translate("reconstruction_window", "Regularization parameter", 0));
+        b_table_label->setText(QApplication::translate("reconstruction_window", "B-table (optional)", 0));
+        load_b_table->setText(QApplication::translate("reconstruction_window", "...", 0));
+        AdvancedOptions->setText(QApplication::translate("reconstruction_window", "Advanced Options >>", 0));
+        ODFSharpening->setTitle(QApplication::translate("reconstruction_window", "ODF Sharpening", 0));
         odf_sharpening->clear();
         odf_sharpening->insertItems(0, QStringList()
-         << QApplication::translate("reconstruction_window", "Off", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("reconstruction_window", "Deconvolution", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("reconstruction_window", "Decomposition", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("reconstruction_window", "Off", 0)
+         << QApplication::translate("reconstruction_window", "Deconvolution", 0)
+         << QApplication::translate("reconstruction_window", "Decomposition", 0)
         );
-        label_12->setText(QApplication::translate("reconstruction_window", "\317\265", 0, QApplication::UnicodeUTF8));
-        label_11->setText(QApplication::translate("reconstruction_window", "m", 0, QApplication::UnicodeUTF8));
-        label_4->setText(QApplication::translate("reconstruction_window", "Response Function Selection", 0, QApplication::UnicodeUTF8));
+        label_12->setText(QApplication::translate("reconstruction_window", "\317\265", 0));
+        label_11->setText(QApplication::translate("reconstruction_window", "m", 0));
+        label_4->setText(QApplication::translate("reconstruction_window", "Response Function Selection", 0));
         RFSelection->clear();
         RFSelection->insertItems(0, QStringList()
-         << QApplication::translate("reconstruction_window", "Auto", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("reconstruction_window", "Manual", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("reconstruction_window", "Auto", 0)
+         << QApplication::translate("reconstruction_window", "Manual", 0)
         );
-        label_10->setText(QApplication::translate("reconstruction_window", "at (x,y,z)=", 0, QApplication::UnicodeUTF8));
-        Output->setTitle(QApplication::translate("reconstruction_window", "Output", 0, QApplication::UnicodeUTF8));
-        RecordODF->setText(QApplication::translate("reconstruction_window", "ODFs", 0, QApplication::UnicodeUTF8));
-        output_mapping->setText(QApplication::translate("reconstruction_window", "Spatial mapping", 0, QApplication::UnicodeUTF8));
-        output_jacobian->setText(QApplication::translate("reconstruction_window", "Jacobian determinant", 0, QApplication::UnicodeUTF8));
-        groupBox_2->setTitle(QApplication::translate("reconstruction_window", "Others", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("reconstruction_window", "ODF Tessellation", 0, QApplication::UnicodeUTF8));
+        label_10->setText(QApplication::translate("reconstruction_window", "at (x,y,z)=", 0));
+        Output->setTitle(QApplication::translate("reconstruction_window", "Output", 0));
+        RecordODF->setText(QApplication::translate("reconstruction_window", "ODFs", 0));
+        output_mapping->setText(QApplication::translate("reconstruction_window", "Spatial mapping", 0));
+        output_jacobian->setText(QApplication::translate("reconstruction_window", "Jacobian determinant", 0));
+        groupBox_2->setTitle(QApplication::translate("reconstruction_window", "Others", 0));
+        label_2->setText(QApplication::translate("reconstruction_window", "ODF Tessellation", 0));
         ODFDim->clear();
         ODFDim->insertItems(0, QStringList()
-         << QApplication::translate("reconstruction_window", "4-fold", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("reconstruction_window", "5-fold", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("reconstruction_window", "6-fold", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("reconstruction_window", "8-fold", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("reconstruction_window", "10-fold", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("reconstruction_window", "12-fold", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("reconstruction_window", "16-fold", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("reconstruction_window", "20-fold", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("reconstruction_window", "4-fold", 0)
+         << QApplication::translate("reconstruction_window", "5-fold", 0)
+         << QApplication::translate("reconstruction_window", "6-fold", 0)
+         << QApplication::translate("reconstruction_window", "8-fold", 0)
+         << QApplication::translate("reconstruction_window", "10-fold", 0)
+         << QApplication::translate("reconstruction_window", "12-fold", 0)
+         << QApplication::translate("reconstruction_window", "16-fold", 0)
+         << QApplication::translate("reconstruction_window", "20-fold", 0)
         );
-        label_3->setText(QApplication::translate("reconstruction_window", "Number of fibers resolved", 0, QApplication::UnicodeUTF8));
-        check_btable->setText(QApplication::translate("reconstruction_window", "Check btable", 0, QApplication::UnicodeUTF8));
-        balance_scheme->setText(QApplication::translate("reconstruction_window", "Balance scheme", 0, QApplication::UnicodeUTF8));
-        HalfSphere->setText(QApplication::translate("reconstruction_window", "Half-sphere scheme", 0, QApplication::UnicodeUTF8));
-        label_9->setText(QApplication::translate("reconstruction_window", "Parallel reconstruction:", 0, QApplication::UnicodeUTF8));
-        doDTI->setText(QApplication::translate("reconstruction_window", "Run reconstruction", 0, QApplication::UnicodeUTF8));
+        label_3->setText(QApplication::translate("reconstruction_window", "Number of fibers resolved", 0));
+        check_btable->setText(QApplication::translate("reconstruction_window", "Check btable", 0));
+        balance_scheme->setText(QApplication::translate("reconstruction_window", "Balance scheme", 0));
+        HalfSphere->setText(QApplication::translate("reconstruction_window", "Half-sphere scheme", 0));
+        label_9->setText(QApplication::translate("reconstruction_window", "Parallel reconstruction:", 0));
+        doDTI->setText(QApplication::translate("reconstruction_window", "Run reconstruction", 0));
         doDTI->setDescription(QString());
-        toolBox->setItemText(toolBox->indexOf(page), QApplication::translate("reconstruction_window", "Step 2: select reconstruction method", 0, QApplication::UnicodeUTF8));
-        menuFile->setTitle(QApplication::translate("reconstruction_window", "&File", 0, QApplication::UnicodeUTF8));
-        menu_Edit->setTitle(QApplication::translate("reconstruction_window", "&Edit", 0, QApplication::UnicodeUTF8));
+        toolBox->setItemText(toolBox->indexOf(page), QApplication::translate("reconstruction_window", "Step 2: select reconstruction method", 0));
+        menuFile->setTitle(QApplication::translate("reconstruction_window", "&File", 0));
+        menu_Edit->setTitle(QApplication::translate("reconstruction_window", "&Edit", 0));
     } // retranslateUi
 
 };

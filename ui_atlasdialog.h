@@ -11,17 +11,17 @@
 #define UI_ATLASDIALOG_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QComboBox>
-#include <QtGui/QDialog>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QListView>
-#include <QtGui/QPushButton>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QVBoxLayout>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QComboBox>
+#include <QDialog>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QListView>
+#include <QPushButton>
+#include <QSpacerItem>
+#include <QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 
@@ -84,8 +84,8 @@ public:
     void retranslateUi(QDialog *AtlasDialog)
     {
         AtlasDialog->setWindowTitle(QString());
-        add_atlas->setText(QApplication::translate("AtlasDialog", "Add", 0, QApplication::UnicodeUTF8));
-        pushButton->setText(QApplication::translate("AtlasDialog", "Close", 0, QApplication::UnicodeUTF8));
+        add_atlas->setText(QApplication::translate("AtlasDialog", "Add", 0));
+        pushButton->setText(QApplication::translate("AtlasDialog", "Close", 0));
     } // retranslateUi
 
 };

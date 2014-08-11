@@ -11,21 +11,21 @@
 #define UI_VBCDIALOG_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDialog>
-#include <QtGui/QGroupBox>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QListView>
-#include <QtGui/QPushButton>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QToolButton>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QDialog>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLineEdit>
+#include <QListView>
+#include <QPushButton>
+#include <QSpacerItem>
+#include <QToolButton>
+#include <QVBoxLayout>
+#include <QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -222,21 +222,21 @@ public:
 
     void retranslateUi(QDialog *VBCDialog)
     {
-        VBCDialog->setWindowTitle(QApplication::translate("VBCDialog", "Connectometry toolbox", 0, QApplication::UnicodeUTF8));
-        method_group->setTitle(QApplication::translate("VBCDialog", " Select subject FIB files", 0, QApplication::UnicodeUTF8));
-        group1open->setText(QApplication::translate("VBCDialog", "Add", 0, QApplication::UnicodeUTF8));
+        VBCDialog->setWindowTitle(QApplication::translate("VBCDialog", "Connectometry toolbox", 0));
+        method_group->setTitle(QApplication::translate("VBCDialog", " Select subject FIB files", 0));
+        group1open->setText(QApplication::translate("VBCDialog", "Add", 0));
         group1delete->setText(QString());
-        moveup->setText(QApplication::translate("VBCDialog", "Up", 0, QApplication::UnicodeUTF8));
-        movedown->setText(QApplication::translate("VBCDialog", "Down", 0, QApplication::UnicodeUTF8));
-        open_list1->setText(QApplication::translate("VBCDialog", "Open List", 0, QApplication::UnicodeUTF8));
-        save_list1->setText(QApplication::translate("VBCDialog", "Save List", 0, QApplication::UnicodeUTF8));
-        open_dir1->setText(QApplication::translate("VBCDialog", "Search in Directory...", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("VBCDialog", "Skeleton:", 0, QApplication::UnicodeUTF8));
+        moveup->setText(QApplication::translate("VBCDialog", "Up", 0));
+        movedown->setText(QApplication::translate("VBCDialog", "Down", 0));
+        open_list1->setText(QApplication::translate("VBCDialog", "Open List", 0));
+        save_list1->setText(QApplication::translate("VBCDialog", "Save List", 0));
+        open_dir1->setText(QApplication::translate("VBCDialog", "Search in Directory...", 0));
+        label->setText(QApplication::translate("VBCDialog", "Skeleton:", 0));
         open_skeleton->setText(QString());
-        ODF_label->setText(QApplication::translate("VBCDialog", "Output file name:", 0, QApplication::UnicodeUTF8));
-        select_output_file->setText(QApplication::translate("VBCDialog", "...", 0, QApplication::UnicodeUTF8));
-        create_data_base->setText(QApplication::translate("VBCDialog", "Create Database", 0, QApplication::UnicodeUTF8));
-        close->setText(QApplication::translate("VBCDialog", "Close", 0, QApplication::UnicodeUTF8));
+        ODF_label->setText(QApplication::translate("VBCDialog", "Output file name:", 0));
+        select_output_file->setText(QApplication::translate("VBCDialog", "...", 0));
+        create_data_base->setText(QApplication::translate("VBCDialog", "Create Database", 0));
+        close->setText(QApplication::translate("VBCDialog", "Close", 0));
     } // retranslateUi
 
 };

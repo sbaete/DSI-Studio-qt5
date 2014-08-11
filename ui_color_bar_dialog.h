@@ -11,22 +11,22 @@
 #define UI_COLOR_BAR_DIALOG_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QComboBox>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/QFormLayout>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QSplitter>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QDoubleSpinBox>
+#include <QFormLayout>
+#include <QGraphicsView>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QPushButton>
+#include <QSplitter>
+#include <QVBoxLayout>
+#include <QWidget>
 #include "qcolorcombobox.h"
 
 QT_BEGIN_NAMESPACE
@@ -194,20 +194,20 @@ public:
 
     void retranslateUi(QDialog *color_bar_dialog)
     {
-        color_bar_dialog->setWindowTitle(QApplication::translate("color_bar_dialog", "Color Bar", 0, QApplication::UnicodeUTF8));
-        label_13->setText(QApplication::translate("color_bar_dialog", "Index", 0, QApplication::UnicodeUTF8));
-        label_10->setText(QApplication::translate("color_bar_dialog", "Style", 0, QApplication::UnicodeUTF8));
+        color_bar_dialog->setWindowTitle(QApplication::translate("color_bar_dialog", "Color Bar", 0));
+        label_13->setText(QApplication::translate("color_bar_dialog", "Index", 0));
+        label_10->setText(QApplication::translate("color_bar_dialog", "Style", 0));
         color_bar_style->clear();
         color_bar_style->insertItems(0, QStringList()
-         << QApplication::translate("color_bar_dialog", "Two colors", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("color_bar_dialog", "Color spectrum", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("color_bar_dialog", "Two colors", 0)
+         << QApplication::translate("color_bar_dialog", "Color spectrum", 0)
         );
-        label_9->setText(QApplication::translate("color_bar_dialog", "Max value", 0, QApplication::UnicodeUTF8));
-        label_15->setText(QApplication::translate("color_bar_dialog", "Min value", 0, QApplication::UnicodeUTF8));
-        label_11->setText(QApplication::translate("color_bar_dialog", "Color", 0, QApplication::UnicodeUTF8));
+        label_9->setText(QApplication::translate("color_bar_dialog", "Max value", 0));
+        label_15->setText(QApplication::translate("color_bar_dialog", "Min value", 0));
+        label_11->setText(QApplication::translate("color_bar_dialog", "Color", 0));
         color_from->setText(QString());
         color_to->setText(QString());
-        update_rendering->setText(QApplication::translate("color_bar_dialog", "Update", 0, QApplication::UnicodeUTF8));
+        update_rendering->setText(QApplication::translate("color_bar_dialog", "Update", 0));
     } // retranslateUi
 
 };

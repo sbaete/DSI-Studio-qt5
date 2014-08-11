@@ -11,23 +11,23 @@
 #define UI_MANUAL_ALIGNMENT_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QGroupBox>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QSlider>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QSplitter>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QDoubleSpinBox>
+#include <QGraphicsView>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QPushButton>
+#include <QSlider>
+#include <QSpacerItem>
+#include <QSplitter>
+#include <QVBoxLayout>
+#include <QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -423,24 +423,24 @@ public:
 
     void retranslateUi(QDialog *manual_alignment)
     {
-        manual_alignment->setWindowTitle(QApplication::translate("manual_alignment", "Dialog", 0, QApplication::UnicodeUTF8));
-        groupBox->setTitle(QApplication::translate("manual_alignment", "Translocation", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("manual_alignment", "x", 0, QApplication::UnicodeUTF8));
-        label_3->setText(QApplication::translate("manual_alignment", "y", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("manual_alignment", "z", 0, QApplication::UnicodeUTF8));
-        scaling_group->setTitle(QApplication::translate("manual_alignment", "Scaling", 0, QApplication::UnicodeUTF8));
-        label_6->setText(QApplication::translate("manual_alignment", "x", 0, QApplication::UnicodeUTF8));
-        label_4->setText(QApplication::translate("manual_alignment", "y", 0, QApplication::UnicodeUTF8));
-        label_5->setText(QApplication::translate("manual_alignment", "z", 0, QApplication::UnicodeUTF8));
-        tilting_group->setTitle(QApplication::translate("manual_alignment", "Tilting", 0, QApplication::UnicodeUTF8));
-        label_8->setText(QApplication::translate("manual_alignment", "xy", 0, QApplication::UnicodeUTF8));
-        label_7->setText(QApplication::translate("manual_alignment", "xz", 0, QApplication::UnicodeUTF8));
-        label_9->setText(QApplication::translate("manual_alignment", "yz", 0, QApplication::UnicodeUTF8));
-        groupBox_4->setTitle(QApplication::translate("manual_alignment", "Rotation", 0, QApplication::UnicodeUTF8));
-        label_11->setText(QApplication::translate("manual_alignment", "x", 0, QApplication::UnicodeUTF8));
-        label_12->setText(QApplication::translate("manual_alignment", "y", 0, QApplication::UnicodeUTF8));
-        label_10->setText(QApplication::translate("manual_alignment", "z", 0, QApplication::UnicodeUTF8));
-        rerun->setText(QApplication::translate("manual_alignment", "Re-run", 0, QApplication::UnicodeUTF8));
+        manual_alignment->setWindowTitle(QApplication::translate("manual_alignment", "Dialog", 0));
+        groupBox->setTitle(QApplication::translate("manual_alignment", "Translocation", 0));
+        label_2->setText(QApplication::translate("manual_alignment", "x", 0));
+        label_3->setText(QApplication::translate("manual_alignment", "y", 0));
+        label->setText(QApplication::translate("manual_alignment", "z", 0));
+        scaling_group->setTitle(QApplication::translate("manual_alignment", "Scaling", 0));
+        label_6->setText(QApplication::translate("manual_alignment", "x", 0));
+        label_4->setText(QApplication::translate("manual_alignment", "y", 0));
+        label_5->setText(QApplication::translate("manual_alignment", "z", 0));
+        tilting_group->setTitle(QApplication::translate("manual_alignment", "Tilting", 0));
+        label_8->setText(QApplication::translate("manual_alignment", "xy", 0));
+        label_7->setText(QApplication::translate("manual_alignment", "xz", 0));
+        label_9->setText(QApplication::translate("manual_alignment", "yz", 0));
+        groupBox_4->setTitle(QApplication::translate("manual_alignment", "Rotation", 0));
+        label_11->setText(QApplication::translate("manual_alignment", "x", 0));
+        label_12->setText(QApplication::translate("manual_alignment", "y", 0));
+        label_10->setText(QApplication::translate("manual_alignment", "z", 0));
+        rerun->setText(QApplication::translate("manual_alignment", "Re-run", 0));
     } // retranslateUi
 
 };

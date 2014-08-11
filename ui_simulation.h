@@ -11,20 +11,20 @@
 #define UI_SIMULATION_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDialog>
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/QGridLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QSpinBox>
-#include <QtGui/QVBoxLayout>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QDialog>
+#include <QDoubleSpinBox>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QSpacerItem>
+#include <QSpinBox>
+#include <QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 
@@ -207,17 +207,17 @@ public:
 
     void retranslateUi(QDialog *Simulation)
     {
-        Simulation->setWindowTitle(QApplication::translate("Simulation", "Dialog", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("Simulation", "B0 SNR", 0, QApplication::UnicodeUTF8));
-        label_3->setText(QApplication::translate("Simulation", "Trial", 0, QApplication::UnicodeUTF8));
-        label_6->setText(QApplication::translate("Simulation", "FA", 0, QApplication::UnicodeUTF8));
-        label_4->setText(QApplication::translate("Simulation", "Crossing Angle=", 0, QApplication::UnicodeUTF8));
-        CrossingAngle->setText(QApplication::translate("Simulation", "70 90", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("Simulation", "Mean Difusivity", 0, QApplication::UnicodeUTF8));
-        label_5->setText(QApplication::translate("Simulation", "B-table", 0, QApplication::UnicodeUTF8));
-        pushButton->setText(QApplication::translate("Simulation", "...", 0, QApplication::UnicodeUTF8));
-        label_7->setText(QApplication::translate("Simulation", "Output", 0, QApplication::UnicodeUTF8));
-        generate->setText(QApplication::translate("Simulation", "Generate", 0, QApplication::UnicodeUTF8));
+        Simulation->setWindowTitle(QApplication::translate("Simulation", "Dialog", 0));
+        label->setText(QApplication::translate("Simulation", "B0 SNR", 0));
+        label_3->setText(QApplication::translate("Simulation", "Trial", 0));
+        label_6->setText(QApplication::translate("Simulation", "FA", 0));
+        label_4->setText(QApplication::translate("Simulation", "Crossing Angle=", 0));
+        CrossingAngle->setText(QApplication::translate("Simulation", "70 90", 0));
+        label_2->setText(QApplication::translate("Simulation", "Mean Difusivity", 0));
+        label_5->setText(QApplication::translate("Simulation", "B-table", 0));
+        pushButton->setText(QApplication::translate("Simulation", "...", 0));
+        label_7->setText(QApplication::translate("Simulation", "Output", 0));
+        generate->setText(QApplication::translate("Simulation", "Generate", 0));
     } // retranslateUi
 
 };

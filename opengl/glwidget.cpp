@@ -1896,7 +1896,7 @@ void GLWidget::saveLeftRight3DImage(void)
         return;
     cur_tracking_window.add_path("catch_screen",filename);
     bool ok;
-    int angle = QInputDialog::getInteger(this,
+    int angle = QInputDialog::getInt(this,
             "DSI Studio",
             "Assign left angle difference in degrees (negative value for right/left view)):",5,-60,60,5,&ok);
     if(!ok)
@@ -1934,7 +1934,7 @@ void GLWidget::saveRotationSeries(void)
         return;
     cur_tracking_window.add_path("catch_screen",filename);
     bool ok;
-    int angle = QInputDialog::getInteger(this,
+    int angle = QInputDialog::getInt(this,
         "DSI Studio","Rotation angle in each step (degrees):",10,1,360,5,&ok);
     if(!ok)
         return;

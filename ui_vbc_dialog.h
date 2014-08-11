@@ -11,30 +11,30 @@
 #define UI_VBC_DIALOG_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QCheckBox>
-#include <QtGui/QComboBox>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/QFormLayout>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QGroupBox>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QScrollBar>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QSpinBox>
-#include <QtGui/QSplitter>
-#include <QtGui/QTabWidget>
-#include <QtGui/QTableWidget>
-#include <QtGui/QToolButton>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QDoubleSpinBox>
+#include <QFormLayout>
+#include <QGraphicsView>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QPushButton>
+#include <QScrollBar>
+#include <QSpacerItem>
+#include <QSpinBox>
+#include <QSplitter>
+#include <QTabWidget>
+#include <QTableWidget>
+#include <QToolButton>
+#include <QVBoxLayout>
+#include <QWidget>
 #include "plot/qcustomplot.h"
 
 QT_BEGIN_NAMESPACE
@@ -845,78 +845,78 @@ public:
 
     void retranslateUi(QDialog *vbc_dialog)
     {
-        vbc_dialog->setWindowTitle(QApplication::translate("vbc_dialog", "Connectometry", 0, QApplication::UnicodeUTF8));
-        groupBox_7->setTitle(QApplication::translate("vbc_dialog", "STEP 1 Demographics", 0, QApplication::UnicodeUTF8));
-        open_mr_files->setText(QApplication::translate("vbc_dialog", "...", 0, QApplication::UnicodeUTF8));
-        open_instruction_2->setText(QApplication::translate("vbc_dialog", "Open subjects' demographics", 0, QApplication::UnicodeUTF8));
+        vbc_dialog->setWindowTitle(QApplication::translate("vbc_dialog", "Connectometry", 0));
+        groupBox_7->setTitle(QApplication::translate("vbc_dialog", "STEP 1 Demographics", 0));
+        open_mr_files->setText(QApplication::translate("vbc_dialog", "...", 0));
+        open_instruction_2->setText(QApplication::translate("vbc_dialog", "Open subjects' demographics", 0));
         QTableWidgetItem *___qtablewidgetitem = subject_demo->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("vbc_dialog", "Subject ID", 0, QApplication::UnicodeUTF8));
-        groupBox_8->setTitle(QApplication::translate("vbc_dialog", "STEP 2 Parameters", 0, QApplication::UnicodeUTF8));
-        label_7->setText(QApplication::translate("vbc_dialog", "Target:", 0, QApplication::UnicodeUTF8));
-        p_label_2->setText(QApplication::translate("vbc_dialog", "Z threshold:", 0, QApplication::UnicodeUTF8));
-        label_4->setText(QApplication::translate("vbc_dialog", "Permutation:", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("vbc_dialog", "multi-thread:", 0, QApplication::UnicodeUTF8));
-        groupBox->setTitle(QApplication::translate("vbc_dialog", "STEP 3", 0, QApplication::UnicodeUTF8));
-        run_mr_analysis->setText(QApplication::translate("vbc_dialog", "Calculate FDR", 0, QApplication::UnicodeUTF8));
-        view_mr_result->setText(QApplication::translate("vbc_dialog", "View Mapping", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_8), QApplication::translate("vbc_dialog", "Multiple Regression", 0, QApplication::UnicodeUTF8));
-        groupBox_5->setTitle(QApplication::translate("vbc_dialog", "STEP 1: Open patient's fib files", 0, QApplication::UnicodeUTF8));
-        open_files->setText(QApplication::translate("vbc_dialog", "...", 0, QApplication::UnicodeUTF8));
-        open_instruction->setText(QApplication::translate("vbc_dialog", "Open subjects' fib files and compare with the database with a percentile rank of ", 0, QApplication::UnicodeUTF8));
-        show_file_name->setText(QApplication::translate("vbc_dialog", "TextLabel", 0, QApplication::UnicodeUTF8));
-        groupBox_6->setTitle(QApplication::translate("vbc_dialog", "STEP 2: Run analysis", 0, QApplication::UnicodeUTF8));
-        FDR_analysis->setText(QApplication::translate("vbc_dialog", "FDR analysis", 0, QApplication::UnicodeUTF8));
-        pushButton_2->setText(QApplication::translate("vbc_dialog", "Save tracks", 0, QApplication::UnicodeUTF8));
-        view_dif_map->setText(QApplication::translate("vbc_dialog", "View mappings...", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("vbc_dialog", "Individual Analysis", 0, QApplication::UnicodeUTF8));
-        label_11->setText(QApplication::translate("vbc_dialog", "Zoom", 0, QApplication::UnicodeUTF8));
-        coordinate->setText(QApplication::translate("vbc_dialog", "(x,y,z)", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem->setText(QApplication::translate("vbc_dialog", "Subject ID", 0));
+        groupBox_8->setTitle(QApplication::translate("vbc_dialog", "STEP 2 Parameters", 0));
+        label_7->setText(QApplication::translate("vbc_dialog", "Target:", 0));
+        p_label_2->setText(QApplication::translate("vbc_dialog", "Z threshold:", 0));
+        label_4->setText(QApplication::translate("vbc_dialog", "Permutation:", 0));
+        label_2->setText(QApplication::translate("vbc_dialog", "multi-thread:", 0));
+        groupBox->setTitle(QApplication::translate("vbc_dialog", "STEP 3", 0));
+        run_mr_analysis->setText(QApplication::translate("vbc_dialog", "Calculate FDR", 0));
+        view_mr_result->setText(QApplication::translate("vbc_dialog", "View Mapping", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_8), QApplication::translate("vbc_dialog", "Multiple Regression", 0));
+        groupBox_5->setTitle(QApplication::translate("vbc_dialog", "STEP 1: Open patient's fib files", 0));
+        open_files->setText(QApplication::translate("vbc_dialog", "...", 0));
+        open_instruction->setText(QApplication::translate("vbc_dialog", "Open subjects' fib files and compare with the database with a percentile rank of ", 0));
+        show_file_name->setText(QApplication::translate("vbc_dialog", "TextLabel", 0));
+        groupBox_6->setTitle(QApplication::translate("vbc_dialog", "STEP 2: Run analysis", 0));
+        FDR_analysis->setText(QApplication::translate("vbc_dialog", "FDR analysis", 0));
+        pushButton_2->setText(QApplication::translate("vbc_dialog", "Save tracks", 0));
+        view_dif_map->setText(QApplication::translate("vbc_dialog", "View mappings...", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("vbc_dialog", "Individual Analysis", 0));
+        label_11->setText(QApplication::translate("vbc_dialog", "Zoom", 0));
+        coordinate->setText(QApplication::translate("vbc_dialog", "(x,y,z)", 0));
         QTableWidgetItem *___qtablewidgetitem1 = subject_list->horizontalHeaderItem(0);
-        ___qtablewidgetitem1->setText(QApplication::translate("vbc_dialog", "Subject ID", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem1->setText(QApplication::translate("vbc_dialog", "Subject ID", 0));
         QTableWidgetItem *___qtablewidgetitem2 = subject_list->horizontalHeaderItem(1);
-        ___qtablewidgetitem2->setText(QApplication::translate("vbc_dialog", "Value", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem2->setText(QApplication::translate("vbc_dialog", "Value", 0));
         QTableWidgetItem *___qtablewidgetitem3 = subject_list->horizontalHeaderItem(2);
-        ___qtablewidgetitem3->setText(QApplication::translate("vbc_dialog", "R2", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("vbc_dialog", "Database", 0, QApplication::UnicodeUTF8));
-        groupBox_2->setTitle(QApplication::translate("vbc_dialog", " Null Distribution", 0, QApplication::UnicodeUTF8));
-        label_3->setText(QApplication::translate("vbc_dialog", "Span to", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("vbc_dialog", "Line width", 0, QApplication::UnicodeUTF8));
-        show_lesser->setText(QApplication::translate("vbc_dialog", "lesser", 0, QApplication::UnicodeUTF8));
-        show_greater->setText(QApplication::translate("vbc_dialog", "greater", 0, QApplication::UnicodeUTF8));
-        show_null_lesser->setText(QApplication::translate("vbc_dialog", "null lesser", 0, QApplication::UnicodeUTF8));
-        show_null_greater->setText(QApplication::translate("vbc_dialog", "null greater", 0, QApplication::UnicodeUTF8));
-        tabWidget_2->setTabText(tabWidget_2->indexOf(tab), QApplication::translate("vbc_dialog", "Plot", 0, QApplication::UnicodeUTF8));
-        save_vbc_dist->setText(QApplication::translate("vbc_dialog", "...", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem3->setText(QApplication::translate("vbc_dialog", "R2", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("vbc_dialog", "Database", 0));
+        groupBox_2->setTitle(QApplication::translate("vbc_dialog", " Null Distribution", 0));
+        label_3->setText(QApplication::translate("vbc_dialog", "Span to", 0));
+        label->setText(QApplication::translate("vbc_dialog", "Line width", 0));
+        show_lesser->setText(QApplication::translate("vbc_dialog", "lesser", 0));
+        show_greater->setText(QApplication::translate("vbc_dialog", "greater", 0));
+        show_null_lesser->setText(QApplication::translate("vbc_dialog", "null lesser", 0));
+        show_null_greater->setText(QApplication::translate("vbc_dialog", "null greater", 0));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab), QApplication::translate("vbc_dialog", "Plot", 0));
+        save_vbc_dist->setText(QApplication::translate("vbc_dialog", "...", 0));
         QTableWidgetItem *___qtablewidgetitem4 = dist_table->horizontalHeaderItem(0);
-        ___qtablewidgetitem4->setText(QApplication::translate("vbc_dialog", "span", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem4->setText(QApplication::translate("vbc_dialog", "span", 0));
         QTableWidgetItem *___qtablewidgetitem5 = dist_table->horizontalHeaderItem(1);
-        ___qtablewidgetitem5->setText(QApplication::translate("vbc_dialog", "pdf(x)", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem5->setText(QApplication::translate("vbc_dialog", "pdf(x)", 0));
         QTableWidgetItem *___qtablewidgetitem6 = dist_table->horizontalHeaderItem(2);
-        ___qtablewidgetitem6->setText(QApplication::translate("vbc_dialog", "cdf(x)", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem6->setText(QApplication::translate("vbc_dialog", "cdf(x)", 0));
         QTableWidgetItem *___qtablewidgetitem7 = dist_table->horizontalHeaderItem(3);
-        ___qtablewidgetitem7->setText(QApplication::translate("vbc_dialog", "FDR", 0, QApplication::UnicodeUTF8));
-        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_2), QApplication::translate("vbc_dialog", "Data", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem7->setText(QApplication::translate("vbc_dialog", "FDR", 0));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_2), QApplication::translate("vbc_dialog", "Data", 0));
         result_label1->setText(QString());
         result_label2->setText(QString());
         result_label3->setText(QString());
         result_label4->setText(QString());
-        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_7), QApplication::translate("vbc_dialog", "Other information", 0, QApplication::UnicodeUTF8));
-        groupBox_3->setTitle(QApplication::translate("vbc_dialog", "FDR", 0, QApplication::UnicodeUTF8));
-        label_6->setText(QApplication::translate("vbc_dialog", "Span to", 0, QApplication::UnicodeUTF8));
-        label_9->setText(QApplication::translate("vbc_dialog", "Line width", 0, QApplication::UnicodeUTF8));
-        show_lesser_2->setText(QApplication::translate("vbc_dialog", "lesser", 0, QApplication::UnicodeUTF8));
-        show_greater_2->setText(QApplication::translate("vbc_dialog", "greater", 0, QApplication::UnicodeUTF8));
-        tabWidget_3->setTabText(tabWidget_3->indexOf(tab_5), QApplication::translate("vbc_dialog", "Plot", 0, QApplication::UnicodeUTF8));
-        save_fdr_dist->setText(QApplication::translate("vbc_dialog", "...", 0, QApplication::UnicodeUTF8));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tab_7), QApplication::translate("vbc_dialog", "Other information", 0));
+        groupBox_3->setTitle(QApplication::translate("vbc_dialog", "FDR", 0));
+        label_6->setText(QApplication::translate("vbc_dialog", "Span to", 0));
+        label_9->setText(QApplication::translate("vbc_dialog", "Line width", 0));
+        show_lesser_2->setText(QApplication::translate("vbc_dialog", "lesser", 0));
+        show_greater_2->setText(QApplication::translate("vbc_dialog", "greater", 0));
+        tabWidget_3->setTabText(tabWidget_3->indexOf(tab_5), QApplication::translate("vbc_dialog", "Plot", 0));
+        save_fdr_dist->setText(QApplication::translate("vbc_dialog", "...", 0));
         QTableWidgetItem *___qtablewidgetitem8 = fdr_table->horizontalHeaderItem(0);
-        ___qtablewidgetitem8->setText(QApplication::translate("vbc_dialog", "span", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem8->setText(QApplication::translate("vbc_dialog", "span", 0));
         QTableWidgetItem *___qtablewidgetitem9 = fdr_table->horizontalHeaderItem(1);
-        ___qtablewidgetitem9->setText(QApplication::translate("vbc_dialog", "pdf(x)", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem9->setText(QApplication::translate("vbc_dialog", "pdf(x)", 0));
         QTableWidgetItem *___qtablewidgetitem10 = fdr_table->horizontalHeaderItem(2);
-        ___qtablewidgetitem10->setText(QApplication::translate("vbc_dialog", "cdf(x)", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem10->setText(QApplication::translate("vbc_dialog", "cdf(x)", 0));
         QTableWidgetItem *___qtablewidgetitem11 = fdr_table->horizontalHeaderItem(3);
-        ___qtablewidgetitem11->setText(QApplication::translate("vbc_dialog", "FDR", 0, QApplication::UnicodeUTF8));
-        tabWidget_3->setTabText(tabWidget_3->indexOf(tab_6), QApplication::translate("vbc_dialog", "Data", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem11->setText(QApplication::translate("vbc_dialog", "FDR", 0));
+        tabWidget_3->setTabText(tabWidget_3->indexOf(tab_6), QApplication::translate("vbc_dialog", "Data", 0));
     } // retranslateUi
 
 };

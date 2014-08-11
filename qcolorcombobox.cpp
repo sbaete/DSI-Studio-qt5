@@ -3,7 +3,7 @@
 
 QColor QColorComboBox::color() const
  {
-    return qVariantValue<QColor>(itemData(currentIndex(), Qt::DecorationRole));
+    return itemData(currentIndex(), Qt::DecorationRole).value<QColor>();
  }
 
 void QColorComboBox::setColor(QColor color)

@@ -11,18 +11,18 @@
 #define UI_MOTION_DIALOG_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QCheckBox>
-#include <QtGui/QDialog>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QProgressBar>
-#include <QtGui/QPushButton>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QVBoxLayout>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QCheckBox>
+#include <QDialog>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QProgressBar>
+#include <QPushButton>
+#include <QSpacerItem>
+#include <QVBoxLayout>
 #include "plot/qcustomplot.h"
 
 QT_BEGIN_NAMESPACE
@@ -156,15 +156,15 @@ public:
 
     void retranslateUi(QDialog *motion_dialog)
     {
-        motion_dialog->setWindowTitle(QApplication::translate("motion_dialog", "Motion Correction", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("motion_dialog", "Translocation:", 0, QApplication::UnicodeUTF8));
-        legend1->setText(QApplication::translate("motion_dialog", "legend", 0, QApplication::UnicodeUTF8));
-        label_3->setText(QApplication::translate("motion_dialog", "Rotation:", 0, QApplication::UnicodeUTF8));
-        legend2->setText(QApplication::translate("motion_dialog", "legend", 0, QApplication::UnicodeUTF8));
+        motion_dialog->setWindowTitle(QApplication::translate("motion_dialog", "Motion Correction", 0));
+        label_2->setText(QApplication::translate("motion_dialog", "Translocation:", 0));
+        legend1->setText(QApplication::translate("motion_dialog", "legend", 0));
+        label_3->setText(QApplication::translate("motion_dialog", "Rotation:", 0));
+        legend2->setText(QApplication::translate("motion_dialog", "legend", 0));
         label->setText(QString());
-        progress_label->setText(QApplication::translate("motion_dialog", "Estimating motion...", 0, QApplication::UnicodeUTF8));
-        correction->setText(QApplication::translate("motion_dialog", "Correct Motion", 0, QApplication::UnicodeUTF8));
-        close->setText(QApplication::translate("motion_dialog", "Close", 0, QApplication::UnicodeUTF8));
+        progress_label->setText(QApplication::translate("motion_dialog", "Estimating motion...", 0));
+        correction->setText(QApplication::translate("motion_dialog", "Correct Motion", 0));
+        close->setText(QApplication::translate("motion_dialog", "Close", 0));
     } // retranslateUi
 
 };

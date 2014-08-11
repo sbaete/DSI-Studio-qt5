@@ -3,8 +3,10 @@
 #include <string>
 #include <cstdio>
 #include <QApplication>
-#include <QCleanlooksStyle>
-#include <QMacStyle>
+#include <QtGui>
+//#include <QCleanlooksStyle>
+//#include <QMacStyle>
+#include <QStyleFactory>
 #include <QMetaObject>
 #include <QMetaMethod>
 #include <QMessageBox>
@@ -137,6 +139,7 @@ int main(int ac, char *av[])
 
         return 1;
     }
+    QApplication::setStyle(QStyleFactory::create("Fusion"));
     QApplication a(ac,av);
     a.setOrganizationName("LabSolver");
     a.setApplicationName("DSI Studio");

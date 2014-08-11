@@ -11,23 +11,23 @@
 #define UI_CONNECTIVITY_MATRIX_DIALOG_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QCheckBox>
-#include <QtGui/QComboBox>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/QFrame>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QToolButton>
-#include <QtGui/QVBoxLayout>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QDoubleSpinBox>
+#include <QFrame>
+#include <QGraphicsView>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QPushButton>
+#include <QSpacerItem>
+#include <QToolButton>
+#include <QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 
@@ -174,19 +174,19 @@ public:
 
     void retranslateUi(QDialog *connectivity_matrix_dialog)
     {
-        connectivity_matrix_dialog->setWindowTitle(QApplication::translate("connectivity_matrix_dialog", "Dialog", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("connectivity_matrix_dialog", "Regioins:", 0, QApplication::UnicodeUTF8));
-        label_3->setText(QApplication::translate("connectivity_matrix_dialog", "Count connectivity if tracks", 0, QApplication::UnicodeUTF8));
+        connectivity_matrix_dialog->setWindowTitle(QApplication::translate("connectivity_matrix_dialog", "Dialog", 0));
+        label_2->setText(QApplication::translate("connectivity_matrix_dialog", "Regioins:", 0));
+        label_3->setText(QApplication::translate("connectivity_matrix_dialog", "Count connectivity if tracks", 0));
         end_only->clear();
         end_only->insertItems(0, QStringList()
-         << QApplication::translate("connectivity_matrix_dialog", "pass region", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("connectivity_matrix_dialog", "end in region", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("connectivity_matrix_dialog", "pass region", 0)
+         << QApplication::translate("connectivity_matrix_dialog", "end in region", 0)
         );
-        recalculate->setText(QApplication::translate("connectivity_matrix_dialog", "Recalculate", 0, QApplication::UnicodeUTF8));
-        save_as->setText(QApplication::translate("connectivity_matrix_dialog", "...", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("connectivity_matrix_dialog", "Zoom in/out", 0, QApplication::UnicodeUTF8));
-        log->setText(QApplication::translate("connectivity_matrix_dialog", "Logarithm", 0, QApplication::UnicodeUTF8));
-        norm->setText(QApplication::translate("connectivity_matrix_dialog", "normalized by median length", 0, QApplication::UnicodeUTF8));
+        recalculate->setText(QApplication::translate("connectivity_matrix_dialog", "Recalculate", 0));
+        save_as->setText(QApplication::translate("connectivity_matrix_dialog", "...", 0));
+        label->setText(QApplication::translate("connectivity_matrix_dialog", "Zoom in/out", 0));
+        log->setText(QApplication::translate("connectivity_matrix_dialog", "Logarithm", 0));
+        norm->setText(QApplication::translate("connectivity_matrix_dialog", "normalized by median length", 0));
     } // retranslateUi
 
 };

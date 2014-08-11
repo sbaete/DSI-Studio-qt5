@@ -11,22 +11,22 @@
 #define UI_TRACT_REPORT_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QCheckBox>
-#include <QtGui/QComboBox>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/QGridLayout>
-#include <QtGui/QGroupBox>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QSpinBox>
-#include <QtGui/QVBoxLayout>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QDoubleSpinBox>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QVBoxLayout>
 #include "plot/qcustomplot.h"
 
 QT_BEGIN_NAMESPACE
@@ -193,24 +193,24 @@ public:
 
     void retranslateUi(QDialog *tract_report)
     {
-        tract_report->setWindowTitle(QApplication::translate("tract_report", "Tract Analysis Report", 0, QApplication::UnicodeUTF8));
-        groupBox_2->setTitle(QApplication::translate("tract_report", "Data Sources", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("tract_report", "Data Sampling Strategy", 0, QApplication::UnicodeUTF8));
+        tract_report->setWindowTitle(QApplication::translate("tract_report", "Tract Analysis Report", 0));
+        groupBox_2->setTitle(QApplication::translate("tract_report", "Data Sources", 0));
+        label_2->setText(QApplication::translate("tract_report", "Data Sampling Strategy", 0));
         profile_dir->clear();
         profile_dir->insertItems(0, QStringList()
-         << QApplication::translate("tract_report", "X direction", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("tract_report", "Y direction", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("tract_report", "Z direction", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("tract_report", "fiber orientation", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("tract_report", "mean of each fiber", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("tract_report", "X direction", 0)
+         << QApplication::translate("tract_report", "Y direction", 0)
+         << QApplication::translate("tract_report", "Z direction", 0)
+         << QApplication::translate("tract_report", "fiber orientation", 0)
+         << QApplication::translate("tract_report", "mean of each fiber", 0)
         );
-        label_3->setText(QApplication::translate("tract_report", "Quantitative Index", 0, QApplication::UnicodeUTF8));
-        groupBox->setTitle(QApplication::translate("tract_report", "Visualization", 0, QApplication::UnicodeUTF8));
-        label_12->setText(QApplication::translate("tract_report", "Line Width", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("tract_report", "Regression Bandwidth", 0, QApplication::UnicodeUTF8));
-        report_legend->setText(QApplication::translate("tract_report", "Show Legend", 0, QApplication::UnicodeUTF8));
-        save_image->setText(QApplication::translate("tract_report", "Save Image...", 0, QApplication::UnicodeUTF8));
-        save_report->setText(QApplication::translate("tract_report", "Save Report Data...", 0, QApplication::UnicodeUTF8));
+        label_3->setText(QApplication::translate("tract_report", "Quantitative Index", 0));
+        groupBox->setTitle(QApplication::translate("tract_report", "Visualization", 0));
+        label_12->setText(QApplication::translate("tract_report", "Line Width", 0));
+        label->setText(QApplication::translate("tract_report", "Regression Bandwidth", 0));
+        report_legend->setText(QApplication::translate("tract_report", "Show Legend", 0));
+        save_image->setText(QApplication::translate("tract_report", "Save Image...", 0));
+        save_report->setText(QApplication::translate("tract_report", "Save Report Data...", 0));
     } // retranslateUi
 
 };

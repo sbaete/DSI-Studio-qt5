@@ -4,7 +4,7 @@
 QT += core \
     gui \
     opengl
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 #CONFIG += console
 TARGET = dsi_studio
 TEMPLATE = app
@@ -25,7 +25,8 @@ QMAKE_CXXFLAGS += -fpermissive
 LIBS += -lboost_thread \
         -lboost_program_options \
         -lGLU \
-        -lz
+        -lz \
+        -lboost_system
 }
 
 mac{
@@ -104,7 +105,21 @@ HEADERS += mainwindow.h \
     tracking/color_bar_dialog.hpp \
     tracking/connectivity_matrix_dialog.h \
     tracking/atlasdialog.h \
-    dicom/motion_dialog.hpp
+    dicom/motion_dialog.hpp \
+    ui_mainwindow.h \
+    ui_dicom_parser.h \
+    ui_view_image.h \
+    ui_vbcdialog.h \
+    ui_vbc_dialog.h \
+    ui_tract_report.h \
+    ui_tracking_window.h \
+    ui_simulation.h \
+    ui_reconstruction_window.h \
+    ui_motion_dialog.h \
+    ui_manual_alignment.h \
+    ui_connectivity_matrix_dialog.h \
+    ui_color_bar_dialog.h \
+    ui_atlasdialog.h
 FORMS += mainwindow.ui \
     tracking/tracking_window.ui \
     reconstruction/reconstruction_window.ui \
@@ -181,4 +196,18 @@ SOURCES += main.cpp \
     dicom/motion_dialog.cpp
 
 OTHER_FILES += \
-    options.txt
+    options.txt \
+    update_mac.sh \
+    install_linux_red_hat.sh \
+    dsi_studio.pro.user \
+    dsi_studio.pro.user.b14b646.2.6pre1 \
+    readme.txt \
+    object_script.dsi_studio.Release \
+    object_script.dsi_studio.Debug \
+    dsi_studio.pro.user.2.5pre1 \
+    dsi_studio.pro.user.2.1pre1 \
+    INSTALL_LINUX.txt \
+    COPYRIGHT \
+    Makefile.Release \
+    Makefile.Debug \
+    Makefile

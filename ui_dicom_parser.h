@@ -11,22 +11,22 @@
 #define UI_DICOM_PARSER_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QCheckBox>
-#include <QtGui/QComboBox>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QTableWidget>
-#include <QtGui/QToolButton>
-#include <QtGui/QVBoxLayout>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QSpacerItem>
+#include <QTableWidget>
+#include <QToolButton>
+#include <QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 
@@ -240,40 +240,40 @@ public:
 
     void retranslateUi(QDialog *dicom_parser)
     {
-        dicom_parser->setWindowTitle(QApplication::translate("dicom_parser", "B-table", 0, QApplication::UnicodeUTF8));
-        loadImage->setText(QApplication::translate("dicom_parser", "Add Images...", 0, QApplication::UnicodeUTF8));
-        toolButton_2->setText(QApplication::translate("dicom_parser", "Load b-table...", 0, QApplication::UnicodeUTF8));
-        load_bval->setText(QApplication::translate("dicom_parser", "Load bval...", 0, QApplication::UnicodeUTF8));
-        load_bvec->setText(QApplication::translate("dicom_parser", "Load bvec...", 0, QApplication::UnicodeUTF8));
-        toolButton_8->setText(QApplication::translate("dicom_parser", "Save b-table...", 0, QApplication::UnicodeUTF8));
-        apply_slice_orientation->setText(QApplication::translate("dicom_parser", "Apply slice orientation", 0, QApplication::UnicodeUTF8));
-        toolButton->setText(QApplication::translate("dicom_parser", "Flip bx", 0, QApplication::UnicodeUTF8));
-        toolButton_3->setText(QApplication::translate("dicom_parser", "Flip by", 0, QApplication::UnicodeUTF8));
-        toolButton_4->setText(QApplication::translate("dicom_parser", "Flip bz", 0, QApplication::UnicodeUTF8));
-        toolButton_5->setText(QApplication::translate("dicom_parser", "Switch bx by", 0, QApplication::UnicodeUTF8));
-        toolButton_6->setText(QApplication::translate("dicom_parser", "Switch bx bz", 0, QApplication::UnicodeUTF8));
-        toolButton_7->setText(QApplication::translate("dicom_parser", "Switch by bz", 0, QApplication::UnicodeUTF8));
-        motion_correction->setText(QApplication::translate("dicom_parser", "Detect motion...", 0, QApplication::UnicodeUTF8));
+        dicom_parser->setWindowTitle(QApplication::translate("dicom_parser", "B-table", 0));
+        loadImage->setText(QApplication::translate("dicom_parser", "Add Images...", 0));
+        toolButton_2->setText(QApplication::translate("dicom_parser", "Load b-table...", 0));
+        load_bval->setText(QApplication::translate("dicom_parser", "Load bval...", 0));
+        load_bvec->setText(QApplication::translate("dicom_parser", "Load bvec...", 0));
+        toolButton_8->setText(QApplication::translate("dicom_parser", "Save b-table...", 0));
+        apply_slice_orientation->setText(QApplication::translate("dicom_parser", "Apply slice orientation", 0));
+        toolButton->setText(QApplication::translate("dicom_parser", "Flip bx", 0));
+        toolButton_3->setText(QApplication::translate("dicom_parser", "Flip by", 0));
+        toolButton_4->setText(QApplication::translate("dicom_parser", "Flip bz", 0));
+        toolButton_5->setText(QApplication::translate("dicom_parser", "Switch bx by", 0));
+        toolButton_6->setText(QApplication::translate("dicom_parser", "Switch bx bz", 0));
+        toolButton_7->setText(QApplication::translate("dicom_parser", "Switch by bz", 0));
+        motion_correction->setText(QApplication::translate("dicom_parser", "Detect motion...", 0));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("dicom_parser", "File Name", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem->setText(QApplication::translate("dicom_parser", "File Name", 0));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QApplication::translate("dicom_parser", "b value", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem1->setText(QApplication::translate("dicom_parser", "b value", 0));
         QTableWidgetItem *___qtablewidgetitem2 = tableWidget->horizontalHeaderItem(2);
-        ___qtablewidgetitem2->setText(QApplication::translate("dicom_parser", "bx", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem2->setText(QApplication::translate("dicom_parser", "bx", 0));
         QTableWidgetItem *___qtablewidgetitem3 = tableWidget->horizontalHeaderItem(3);
-        ___qtablewidgetitem3->setText(QApplication::translate("dicom_parser", "by", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem3->setText(QApplication::translate("dicom_parser", "by", 0));
         QTableWidgetItem *___qtablewidgetitem4 = tableWidget->horizontalHeaderItem(4);
-        ___qtablewidgetitem4->setText(QApplication::translate("dicom_parser", "bz", 0, QApplication::UnicodeUTF8));
+        ___qtablewidgetitem4->setText(QApplication::translate("dicom_parser", "bz", 0));
         upsampling->clear();
         upsampling->insertItems(0, QStringList()
-         << QApplication::translate("dicom_parser", "No upsampling", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("dicom_parser", "upsampling 2", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("dicom_parser", "downsampling 2", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("dicom_parser", "No upsampling", 0)
+         << QApplication::translate("dicom_parser", "upsampling 2", 0)
+         << QApplication::translate("dicom_parser", "downsampling 2", 0)
         );
-        topdown->setText(QApplication::translate("dicom_parser", "top-down slices", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("dicom_parser", "Output file:", 0, QApplication::UnicodeUTF8));
-        upperDir->setText(QApplication::translate("dicom_parser", "Upper Directory", 0, QApplication::UnicodeUTF8));
-        pushButton->setText(QApplication::translate("dicom_parser", "&Browse...", 0, QApplication::UnicodeUTF8));
+        topdown->setText(QApplication::translate("dicom_parser", "top-down slices", 0));
+        label->setText(QApplication::translate("dicom_parser", "Output file:", 0));
+        upperDir->setText(QApplication::translate("dicom_parser", "Upper Directory", 0));
+        pushButton->setText(QApplication::translate("dicom_parser", "&Browse...", 0));
     } // retranslateUi
 
 };
