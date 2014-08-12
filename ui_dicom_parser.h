@@ -264,9 +264,9 @@ public:
          << QApplication::translate("dicom_parser", "upsampling 2", 0)
          << QApplication::translate("dicom_parser", "downsampling 2", 0)
         );
-        label->setText(QApplication::translate("dicom_parser", "Output file:", 0);
-        upperDir->setText(QApplication::translate("dicom_parser", "Upper Directory", 0);
-        pushButton->setText(QApplication::translate("dicom_parser", "&Browse...", 0);
+        label->setText(QApplication::translate("dicom_parser", "Output file:", 0));
+        upperDir->setText(QApplication::translate("dicom_parser", "Upper Directory", 0));
+        pushButton->setText(QApplication::translate("dicom_parser", "&Browse...", 0));
     } // retranslateUi
 
 };
