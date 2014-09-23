@@ -13,7 +13,6 @@
 #include "opengl/glwidget.h"
 #include "../region/regiontablewidget.h"
 #include "ui_tracking_window.h"
-#include "tracking_static_link.h"
 #include "opengl/renderingtablewidget.h"
 #include "libs/gzip_interface.hpp"
 #include "tract_cluster.hpp"
@@ -212,7 +211,7 @@ void TractTableWidget::load_tracts(void)
             this,
             "Load tracts as",
             cur_tracking_window.get_path("track"),
-            "Tract files (*.txt *.trk *.mat *.tck);;All files (*)");
+            "Tract files (*.txt *.trk *.trk.gz *.tck);;All files (*)");
     if(!filenames.size())
         return;
     cur_tracking_window.add_path("track",filenames[0]);
@@ -291,8 +290,8 @@ void TractTableWidget::save_all_tracts_as(void)
                 "Save tracts as",
                 cur_tracking_window.get_path("track") + "/" +
                 item(currentRow(),0)->text().replace(':','_') + "." +
-                settings.value("track_file_extension","txt").toString(),
-                "Tract files (*.trk);;Text File (*.txt);;MAT files (*.mat);;All files (*)");
+                settings.value("track_file_extension","trk.gz").toString(),
+                "Tract files (*.trk *.trk.gz);;Text File (*.txt);;MAT files (*.mat);;All files (*)");
     if(filename.isEmpty())
         return;
     settings.setValue("track_file_extension",QFileInfo(filename).suffix());
@@ -457,8 +456,8 @@ void TractTableWidget::save_tracts_as(void)
                 "Save tracts as",
                 cur_tracking_window.get_path("track") + "/" +
                 item(currentRow(),0)->text().replace(':','_') + "."+
-                settings.value("track_file_extension","trk").toString(),
-                 "Tract files (*.trk);;Text File (*.txt);;MAT files (*.mat);;All files (*)");
+                settings.value("track_file_extension","trk.gz").toString(),
+                 "Tract files (*.trk *.trk.gz);;Text File (*.txt);;MAT files (*.mat);;All files (*)");
     if(filename.isEmpty())
         return;
     settings.setValue("track_file_extension",QFileInfo(filename).suffix());
@@ -494,8 +493,8 @@ void TractTableWidget::saveTransformedTracts(const float* transform)
                 this,
                 "Save tracts as",
                 cur_tracking_window.get_path("track") + "/" + item(currentRow(),0)->text() + "." +
-                settings.value("track_file_extension","trk").toString(),
-                 "Tract files (*.trk);;Text File (*.txt);;MAT files (*.mat);;All files (*)");
+                settings.value("track_file_extension","trk.gz").toString(),
+                 "Tract files (*.trk *.trk.gz);;Text File (*.txt);;MAT files (*.mat);;All files (*)");
     if(filename.isEmpty())
         return;
     cur_tracking_window.add_path("track",filename);
@@ -600,7 +599,7 @@ void TractTableWidget::show_tracts_statistics(void)
 void TractTableWidget::show_method(void)
 {
     std::ostringstream out;
-    out << cur_tracking_window.handle->fib_data.report.c_str();
+    out << cur_tracking_window.handle->report.c_str();
     if(currentRow() < tract_models.size())
         out << tract_models[currentRow()]->report.c_str() << std::endl;
     show_info_dialog(this,"Methods",out.str());

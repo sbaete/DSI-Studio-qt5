@@ -4,7 +4,7 @@
 #include <iosfwd>
 #include "image/image.hpp"
 
-class ODFModel;
+class FibData;
 class fiber_orientations;
 struct connectivity_info{
     unsigned int count;
@@ -21,9 +21,9 @@ public:
 
 class TractModel{
 public:
-    std::string report;
+        std::string report;
 private:
-        ODFModel* handle;
+        FibData* handle;
         image::geometry<3> geometry;
         image::vector<3> vs;
         std::auto_ptr<fiber_orientations> fib;
@@ -50,7 +50,7 @@ private:
         void delete_tracts(const std::vector<unsigned int>& tracts_to_delete);
         void select_tracts(const std::vector<unsigned int>& tracts_to_select);
 public:
-        TractModel(ODFModel* handle_);
+        TractModel(FibData* handle_);
         const TractModel& operator=(const TractModel& rhs)
         {
             geometry = rhs.geometry;
@@ -78,6 +78,7 @@ public:
 
         void release_tracts(std::vector<std::vector<float> >& released_tracks);
         void add_tracts(std::vector<std::vector<float> >& new_tracks);
+        void add_tracts(std::vector<std::vector<float> >& new_tracks,unsigned int length_threshold);
         void cull(float select_angle,
                   const image::vector<3,float>& from_dir,
                   const image::vector<3,float>& to_dir,
@@ -104,6 +105,7 @@ public:
         
         const std::vector<float>& get_tract(unsigned int index) const{return tract_data[index];}
         const std::vector<std::vector<float> >& get_tracts(void) const{return tract_data;}
+        std::vector<std::vector<float> >& get_tracts(void) {return tract_data;}
         unsigned int get_tract_color(unsigned int index) const{return tract_color[index];}
         unsigned int get_tract_length(unsigned int index) const{return tract_data[index].size();}
         void get_density_map(image::basic_image<unsigned int,3>& mapping,
@@ -150,7 +152,7 @@ public:
     std::vector<float> tract_median_length;
     std::vector<float> tract_mean_length;
 public:
-    typedef std::map<float,std::pair<std::vector<image::vector<3,short> >,std::string> > region_table_type;
+    typedef std::multimap<float,std::pair<std::vector<image::vector<3,short> >,std::string> > region_table_type;
     std::vector<std::vector<image::vector<3,short> > > regions;
     std::vector<std::string> region_name;
     void set_atlas(const atlas& data,const image::basic_image<image::vector<3,float>,3 >& mni_position);

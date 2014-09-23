@@ -7,34 +7,6 @@
 #include "image/image.hpp"
 #include "gzip_interface.hpp"
 
-struct AngStatistics
-{
-    float ang_dev;
-    float ang_dev_sq;
-    unsigned int ang_dev_num;
-    AngStatistics(void):ang_dev(0),ang_dev_sq(0),ang_dev_num(0) {}
-    void add(float cosine_value)
-    {
-        cosine_value = std::abs(cosine_value);
-        if (cosine_value >= 1)
-            cosine_value = 1.0;
-        cosine_value = std::acos(cosine_value);
-        ang_dev += cosine_value;
-        ang_dev_sq += cosine_value*cosine_value;
-        ++ang_dev_num;
-    }
-    void calculation(void)
-    {
-        ang_dev /= ang_dev_num;
-        ang_dev_sq /= ang_dev_num;
-        ang_dev_sq -= ang_dev*ang_dev;
-        ang_dev_sq = std::sqrt(ang_dev_sq);
-        ang_dev *= 90.0/3.14159265358979323846;
-        ang_dev_sq *= 90.0/3.14159265358979323846;
-    }
-};
-
-
 struct ODFData{
 private:
     const float* odfs;
@@ -43,11 +15,34 @@ private:
     image::basic_image<unsigned int,3> voxel_index_map;
     std::vector<const float*> odf_blocks;
     std::vector<unsigned int> odf_block_size;
-    image::basic_image<unsigned char,3> odf_block_map1;
+    image::basic_image<unsigned int,3> odf_block_map1;
     image::basic_image<unsigned int,3> odf_block_map2;
     unsigned int half_odf_size;
 public:
     ODFData(void):odfs(0){}
+    void read(gz_mat_read& mat_reader)
+    {
+        unsigned int row,col;
+        {
+            const float* odfs = 0;
+            if(mat_reader.read("odfs",row,col,odfs))
+            {
+                setODFs(odfs,row*col);
+                return;
+            }
+        }
+        for(unsigned int index = 0;;++index)
+        {
+            const float* odf = 0;
+            std::ostringstream out;
+            out << "odf" << index;
+            std::string name = out.str();
+            if(!mat_reader.read(name.c_str(),row,col,odf))
+                return;
+            setODF(index,odf,row*col);
+        }
+    }
+
     void setODFs(const float* odfs_,unsigned int odfs_size_)
     {
         odfs = odfs_;
@@ -149,15 +144,10 @@ public:
 class FiberDirection
 {
 public:
+    image::geometry<3> dim;
     std::vector<const float*> dir;
     std::vector<const short*> findex;
     std::vector<std::vector<short> > findex_buf;
-public:
-private:
-    ODFData odf;
-public:
-    bool has_odfs(void) const{return odf.has_odfs();}
-    const float* get_odf_data(unsigned int index) const{return odf.get_odf_data(index);}
 public:
     std::vector<std::string> index_name;
     std::vector<std::vector<const float*> > index_data;
@@ -165,7 +155,6 @@ public:
 
 public:
     std::vector<const float*> fa;
-    image::geometry<3> dim;
 
     std::vector<image::vector<3,float> > odf_table;
     std::vector<image::vector<3,unsigned short> > odf_faces;
@@ -239,15 +228,6 @@ public:
         for (unsigned int index = 0;check_prog(index,mat_reader.size());++index)
         {
             std::string matrix_name = mat_reader.name(index);
-
-            if (matrix_name == "odfs")
-            {
-                const float* odfs;
-                mat_reader.read(index,row,col,odfs);
-                odf.setODFs(odfs,row*col);
-                continue;
-            }
-
             if (matrix_name == "image")
             {
                 check_index(0);
@@ -286,20 +266,6 @@ public:
                 check_index(store_index);
                 dir.resize(findex.size());
                 dir[store_index] = dir_ptr;
-                continue;
-            }
-            if (prefix_name == "odf1" || prefix_name == "odf2" || prefix_name == "odf3" ||
-                    prefix_name == "odf4" || prefix_name == "odf5" || prefix_name == "odf6" ||
-                    prefix_name == "odf7" || prefix_name == "odf8" || prefix_name == "odf9")
-            {
-                store_index += 10*(prefix_name[prefix_name.length()-1]-'0');
-                prefix_name = "odf";
-            }
-            if (prefix_name == "odf")
-            {
-                const float* buf;
-                mat_reader.read(index,row,col,buf);
-                odf.setODF(store_index,buf,row*col);
                 continue;
             }
 
@@ -343,7 +309,7 @@ public:
                 }
         }
 
-        odf.initializeODF(dim,fa[0],half_odf_size);
+
         if(num_fiber == 0)
             error_msg = "No image data found";
         return num_fiber;
@@ -403,11 +369,11 @@ public:
     std::string error_msg,report;
     gz_mat_read mat_reader;
     FiberDirection fib;
+    ODFData odf;
 public:
     image::geometry<3> dim;
     image::vector<3> vs;
     std::vector<float> trans_to_mni;
-    unsigned int total_size;
 public:
     std::vector<ViewItem> view_item;
     unsigned int other_mapping_index;
@@ -435,6 +401,10 @@ public:
             error_msg = fib.error_msg;
             return false;
         }
+        dim = fib.dim;
+        odf.read(mat_reader);
+        odf.initializeODF(dim,fib.fa[0],fib.half_odf_size);
+
         for(int index = 0;index < fib.fa.size();++index)
         {
             view_item.push_back(ViewItem());
@@ -455,16 +425,6 @@ public:
         {
             std::string matrix_name = mat_reader.name(index);
             ::set_title(matrix_name.c_str());
-            if (matrix_name == "dimension")
-            {
-                const unsigned short* dim_buf = 0;
-                mat_reader.read(index,row,col,dim_buf);
-                if (!dim_buf|| row*col != 3)
-                    return false;
-                std::copy(dim_buf,dim_buf+3,dim.begin());
-                total_size = dim.size();
-                continue;
-            }
             if (matrix_name == "voxel_size")
             {
                 const float* size_buf = 0;
@@ -486,25 +446,24 @@ public:
             }
             if (matrix_name == "image")
                 continue;
-
             std::string prefix_name(matrix_name.begin(),matrix_name.end()-1);
             if (prefix_name == "index" || prefix_name == "fa" || prefix_name == "dir")
                 continue;
             const float* buf = 0;
             mat_reader.read(index,row,col,buf);
-            if (row*col != total_size || !buf)
+            if (row*col != dim.size() || !buf)
                 continue;
             view_item.push_back(ViewItem());
             view_item.back().name = matrix_name;
             view_item.back().is_overlay = false;
-            for(unsigned int i = 0;i < total_size;++i)
+            for(unsigned int i = 0;i < dim.size();++i)
                 if(buf[i] == 0.0 && fib.fa[0][i] != 0.0)
                 {
                     view_item.back().is_overlay = true;
                     break;
                 }
             view_item.back().image_data = image::make_image(fib.dim,buf);
-            view_item.back().set_scale(buf,buf+total_size);
+            view_item.back().set_scale(buf,buf+dim.size());
 
         }
         if (!dim[2])
@@ -513,6 +472,176 @@ public:
             return false;
         }
         return true;
+    }
+public:
+    bool has_odfs(void) const{return odf.has_odfs();}
+    const float* get_odf_data(unsigned int index) const{return odf.get_odf_data(index);}
+public:
+    unsigned int get_name_index(const std::string& index_name) const
+    {
+        for(unsigned int index_num = 0;index_num < view_item.size();++index_num)
+            if(view_item[index_num].name == index_name)
+                return index_num;
+        return view_item.size();
+    }
+
+    float get_value_range(const std::string& view_name) const
+    {
+        unsigned int view_index = get_name_index(view_name);
+        if(view_index == view_item.size())
+            return 0.0;
+        if(view_item[view_index].name == "color")
+            return 0.0;
+        return view_item[view_index].max_value-
+               view_item[view_index].min_value;
+    }
+
+    void get_slice(const std::string& view_name,const std::string& overlay_name,
+                   unsigned char d_index,unsigned int pos,
+                   image::color_image& show_image,float contrast,float offset)
+    {
+        unsigned int view_index = get_name_index(view_name);
+        if(view_index == view_item.size())
+            return;
+
+        if(view_item[view_index].name == "color")
+        {
+
+            if(view_item[view_index].data_buf.empty())
+            {
+                image::basic_image<image::rgb_color,3> color_buf(dim);
+                float max_value = view_item[0].max_value;
+                if(max_value + 1.0 == 1.0)
+                    max_value = 1.0;
+                float r = 255.9/max_value;
+                for (unsigned int index = 0;index < dim.size();++index)
+                {
+                    image::vector<3,float> dir(fib.getDir(index,0));
+                    dir *= std::floor(fib.getFA(index,0)*r);
+                    unsigned int color = (unsigned char)std::abs(dir[0]);
+                    color <<= 8;
+                    color |= (unsigned char)std::abs(dir[1]);
+                    color <<= 8;
+                    color |= (unsigned char)std::abs(dir[2]);
+                    color_buf[index] = color;
+                }
+                color_buf.swap(view_item[view_index].data_buf);
+            }
+            image::reslicing(view_item[view_index].data_buf, show_image, d_index,pos);
+        }
+        else
+        {
+            image::basic_image<float,2> buf;
+            image::reslicing(view_item[view_index].image_data, buf, d_index, pos);
+            show_image.resize(buf.geometry());
+            buf += offset-view_item[view_index].min_value;
+            if(contrast != 0.0)
+                buf *= 255.99/contrast;
+            image::upper_lower_threshold(buf,(float)0.0,(float)255.0);
+            std::copy(buf.begin(),buf.end(),show_image.begin());
+        }
+
+
+        if(overlay_name.length()) // has overlay
+        {
+            unsigned int overlay_index = get_name_index(overlay_name);
+            if(overlay_index == view_item.size())
+                return;
+            if(view_item[overlay_index].data_buf.empty())
+            {
+                using namespace std;
+                const float* data = view_item[overlay_index].image_data.begin();
+                float max_value = view_item[overlay_index].max_value;
+                float min_value = view_item[overlay_index].min_value;
+                float r = max(max_value,-min_value);
+                if(r + 1.0 == 1.0)
+                    r = 1.0;
+                r = 255.9/r;
+                image::basic_image<image::rgb_color,3> color_buf(dim);
+                for (unsigned int index = 0;index < dim.size();++index)
+                    if(data[index] != 0.0)
+                    {
+                        image::rgb_color color;
+                        color.g = std::floor(std::abs(data[index]*r));
+                        if(data[index] > 0.0)
+                            color.r = 255;
+                        else
+                            color.b = 255;
+                        color_buf[index] = color;
+                    }
+                color_buf.swap(view_item[overlay_index].data_buf);
+            }
+            image::color_image buf;
+            image::reslicing(view_item[overlay_index].data_buf, buf, d_index, pos);
+            for(unsigned int index = 0;index < buf.size();++index)
+                if((unsigned int)(buf[index]) != 0)
+                    show_image[index] = buf[index];
+        }
+    }
+
+    void get_voxel_info2(unsigned int x,unsigned int y,unsigned int z,std::vector<float>& buf) const
+    {
+        unsigned int index = (z*dim[1]+y)*dim[0] + x;
+        if (index >= dim.size())
+            return;
+        for(unsigned int i = 0;i < fib.num_fiber;++i)
+        {
+            image::vector<3,float> dir(fib.getDir(index,i));
+            buf.push_back(dir[0]);
+            buf.push_back(dir[1]);
+            buf.push_back(dir[2]);
+        }
+    }
+    void get_voxel_information(unsigned int x,unsigned int y,unsigned int z,std::vector<float>& buf) const
+    {
+        unsigned int index = (z*dim[1]+y)*dim[0] + x;
+        if (index >= dim.size())
+            return;
+        for(unsigned int i = 0;i < view_item.size();++i)
+            if(view_item[i].name != "color")
+                buf.push_back(view_item[i].image_data.empty() ? 0.0 : view_item[i].image_data[index]);
+    }
+public:
+
+    void get_index_titles(std::vector<std::string>& titles)
+    {
+        if (view_item[0].name[0] == 'f')// is dti
+        {
+            titles.push_back("FA mean");
+            titles.push_back("FA sd");
+        }
+        else
+        {
+            titles.push_back("QA mean");
+            titles.push_back("QA sd");
+        }
+        for(int data_index = other_mapping_index;
+            data_index < view_item.size();++data_index)
+        {
+            titles.push_back(view_item[data_index].name+" mean");
+            titles.push_back(view_item[data_index].name+" sd");
+        }
+
+    }
+    void getSlicesDirColor(unsigned short order,unsigned int* pixels) const
+    {
+        for (unsigned int index = 0;index < dim.size();++index,++pixels)
+        {
+            if (fib.getFA(index,order) == 0.0)
+            {
+                *pixels = 0;
+                continue;
+            }
+
+            float fa = fib.getFA(index,order)*255.0;
+            image::vector<3,float> dir(fib.getDir(index,order));
+            unsigned int color = (unsigned char)std::abs(dir[0]*fa);
+            color <<= 8;
+            color |= (unsigned char)std::abs(dir[1]*fa);
+            color <<= 8;
+            color |= (unsigned char)std::abs(dir[2]*fa);
+            *pixels = color;
+        }
     }
 };
 

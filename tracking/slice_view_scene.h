@@ -4,18 +4,18 @@
 #include <vector>
 #include "image/image.hpp"
 #include <QStatusBar>
-class ODFModel;
+class FibData;
 class tracking_window;
 class slice_view_scene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    slice_view_scene(tracking_window& cur_tracking_window_,ODFModel* handle_):
+    slice_view_scene(tracking_window& cur_tracking_window_):
             sel_mode(0),
             mid_down(false),
             mouse_down(false),
             cur_tracking_window(cur_tracking_window_),
-            handle(handle_),statusbar(0)
+            statusbar(0)
     {
 
     }
@@ -23,13 +23,11 @@ public:
     QStatusBar* statusbar;
 private:
     tracking_window& cur_tracking_window;
-    ODFModel* handle;
     image::color_image slice_image,mosaic_image;
 public:
     unsigned int mosaic_size;
     bool get_location(float x,float y,image::vector<3,float>& pos);
-private:
-    // record the mouse press points
+public:    // record the mouse press points
     std::vector<image::vector<3,short> >sel_coord;
     std::vector<image::vector<2,short> >sel_point;
     int cur_region;

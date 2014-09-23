@@ -5,7 +5,7 @@
 #include "gqi_process.hpp"
 #include "image/image.hpp"
 
-
+void get_report(const std::vector<float>& bvalues,image::vector<3> vs,std::string& report);
 struct ImageModel
 {
 public:
@@ -82,6 +82,61 @@ public:
         voxel.dim = mask.geometry();
 
     }
+    bool save_to_nii(const char* nifti_file_name) const
+    {
+        gz_nifti header;
+        float vs[4];
+        std::copy(voxel.vs.begin(),voxel.vs.end(),vs);
+        vs[3] = 1.0;
+        header.set_voxel_size(vs);
+        image::geometry<4> nifti_dim;
+        std::copy(voxel.dim.begin(),voxel.dim.end(),nifti_dim.begin());
+        nifti_dim[3] = voxel.bvalues.size();
+        image::basic_image<unsigned short,4> buffer(nifti_dim);
+        for(unsigned int index = 0;index < voxel.bvalues.size();++index)
+        {
+            std::copy(dwi_data[index],
+                      dwi_data[index]+voxel.dim.size(),
+                      buffer.begin() + (size_t)index*voxel.dim.size());
+        }
+        image::flip_xy(buffer);
+        header << buffer;
+        return header.save_to_file(nifti_file_name);
+    }
+    bool save_b_table(const char* file_name) const
+    {
+        std::ofstream out(file_name);
+        for(unsigned int index = 0;index < voxel.bvalues.size();++index)
+        {
+            out << voxel.bvalues[index] << " "
+                << voxel.bvectors[index][0] << " "
+                << voxel.bvectors[index][1] << " "
+                << voxel.bvectors[index][2] << std::endl;
+        }
+        return out;
+    }
+    bool save_bval(const char* file_name) const
+    {
+        std::ofstream out(file_name);
+        for(unsigned int index = 0;index < voxel.bvalues.size();++index)
+        {
+            if(index)
+                out << " ";
+            out << voxel.bvalues[index];
+        }
+        return out;
+    }
+    bool save_bvec(const char* file_name) const
+    {
+        std::ofstream out(file_name);
+        for(unsigned int index = 0;index < voxel.bvalues.size();++index)
+        {
+            out << voxel.bvectors[index][0] << " "
+                << voxel.bvectors[index][1] << " "
+                << voxel.bvectors[index][2] << std::endl;
+        }
+        return out;
+    }
 
 public:
     ImageModel(void):thread_count(1) {}
@@ -111,10 +166,6 @@ public:
         else
             std::copy(voxel_size,voxel_size+3,voxel.vs.begin());
 
-        const char* report_buf = 0;
-        if(mat_reader.read("report",row,col,report_buf))
-            voxel.report = std::string(report_buf,report_buf+row*col);
-
         if (dim_ptr[0]*dim_ptr[1]*dim_ptr[2] <= 0)
         {
             error_msg = "Invalid dimension setting";
@@ -141,6 +192,12 @@ public:
             voxel.bvectors[index].normalize();
             table += 4;
         }
+
+        const char* report_buf = 0;
+        if(mat_reader.read("report",row,col,report_buf))
+            voxel.report = std::string(report_buf,report_buf+row*col);
+        else
+            get_report(voxel.bvalues,voxel.vs,voxel.report);
 
         dwi_data.resize(voxel.bvalues.size());
         for (unsigned int index = 0;index < voxel.bvalues.size();++index)

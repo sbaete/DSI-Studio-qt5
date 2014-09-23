@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'tracking_window.ui'
 **
-** Created: Mon Aug 11 12:47:06 2014
+** Created: Tue Sep 2 17:34:56 2014
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -125,6 +125,7 @@ public:
     QAction *actionCopyTrack;
     QAction *actionConnectometry;
     QAction *actionSave_3D_screen_in_high_resolution;
+    QAction *actionSave_3D_screen_in_3_views;
     QAction *actionSave_All_Regions_As;
     QAction *actionFloat_3D_window;
     QAction *actionSave_tracking_parameters;
@@ -141,6 +142,7 @@ public:
     QAction *actionView_FIB_Content;
     QAction *actionPublish_or_perish;
     QAction *actionMethod_Report;
+    QAction *actionQuality_Assessment;
     QWidget *centralwidget;
     QVBoxLayout *centralLayout;
     QWidget *main_widget;
@@ -479,6 +481,9 @@ public:
         actionSave_Left_Right_3D_Image = new QAction(tracking_window);
         actionSave_Left_Right_3D_Image->setObjectName(QString::fromUtf8("actionSave_Left_Right_3D_Image"));
         actionSave_Left_Right_3D_Image->setIcon(icon2);
+        actionSave_3D_screen_in_3_views = new QAction(tracking_window);
+        actionSave_3D_screen_in_3_views->setObjectName(QString::fromUtf8("actionSave_3D_screen_in_3_views"));
+        actionSave_3D_screen_in_3_views->setIcon(icon2);
         actionRegion_statistics = new QAction(tracking_window);
         actionRegion_statistics->setObjectName(QString::fromUtf8("actionRegion_statistics"));
         actionManual_Registration = new QAction(tracking_window);
@@ -541,6 +546,8 @@ public:
         actionPublish_or_perish->setObjectName(QString::fromUtf8("actionPublish_or_perish"));
         actionMethod_Report = new QAction(tracking_window);
         actionMethod_Report->setObjectName(QString::fromUtf8("actionMethod_Report"));
+        actionQuality_Assessment = new QAction(tracking_window);
+        actionQuality_Assessment->setObjectName(QString::fromUtf8("actionQuality_Assessment"));
         centralwidget = new QWidget(tracking_window);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         sizePolicy.setHeightForWidth(centralwidget->sizePolicy().hasHeightForWidth());
@@ -1440,6 +1447,7 @@ public:
         menu_View->addAction(actionSave_Anisotrpy_Map_as);
         menu_View->addAction(actionSave_Rotation_Images);
         menu_View->addAction(actionSave_Left_Right_3D_Image);
+        menu_View->addAction(actionSave_3D_screen_in_3_views);
         menu_View->addAction(actionCopy_to_clipboard);
         menu_View->addSeparator();
         menu_View->addAction(actionRestore_window_layout);
@@ -1458,6 +1466,7 @@ public:
         menuTools->addAction(actionRestore_Settings);
         menuTools->addAction(actionManual_Registration);
         menuTools->addAction(actionView_FIB_Content);
+        menuTools->addAction(actionQuality_Assessment);
 
         retranslateUi(tracking_window);
         QObject::connect(tbNewRegion, SIGNAL(clicked()), actionNewRegion, SLOT(trigger()));
@@ -1586,6 +1595,7 @@ public:
         actionOpen_Cluster_Labels->setText(QApplication::translate("tracking_window", "Open Cluster Labels...", 0));
         actionSave_All_Tracts_As->setText(QApplication::translate("tracking_window", "Save All Tracts As...", 0));
         actionSave_Left_Right_3D_Image->setText(QApplication::translate("tracking_window", "Save Left/Right 3D Image...", 0));
+        actionSave_3D_screen_in_3_views->setText(QApplication::translate("tracking_window", "Save 3D Image in 3 views...", 0));
         actionRegion_statistics->setText(QApplication::translate("tracking_window", "Statistics...", 0));
         actionManual_Registration->setText(QApplication::translate("tracking_window", "Background Registration...", 0));
         actionTract_Analysis_Report->setText(QApplication::translate("tracking_window", "Tract Analysis Report...", 0));
@@ -1609,9 +1619,10 @@ public:
         actionRestore_Settings->setText(QApplication::translate("tracking_window", "Restore Rendering Settings", 0));
         actionMerge_All_2->setText(QApplication::translate("tracking_window", "Merge All", 0));
         actionSave_All_Tracts_As_Multiple_Files->setText(QApplication::translate("tracking_window", "Save All Tracts As Multiple Files...", 0));
-        actionView_FIB_Content->setText(QApplication::translate("tracking_window", "View FIB Content", 0));
+        actionView_FIB_Content->setText(QApplication::translate("tracking_window", "View FIB Content...", 0));
         actionPublish_or_perish->setText(QApplication::translate("tracking_window", "Publish or perish...", 0));
         actionMethod_Report->setText(QApplication::translate("tracking_window", "Method Report...", 0));
+        actionQuality_Assessment->setText(QApplication::translate("tracking_window", "Quality Assessment...", 0));
         SliceModality->clear();
         SliceModality->insertItems(0, QStringList()
          << QApplication::translate("tracking_window", "Diffusion", 0)

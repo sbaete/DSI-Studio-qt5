@@ -22,6 +22,7 @@ connectivity_matrix_dialog::connectivity_matrix_dialog(tracking_window *parent) 
     if(cur_tracking_window->regionWidget->regions.size() > 1)
         ui->region_list->setCurrentIndex(0);
     else
+        if(!atlas_list.empty())
         ui->region_list->setCurrentIndex(1);
     on_recalculate_clicked();
 
@@ -82,16 +83,17 @@ void connectivity_matrix_dialog::on_recalculate_clicked()
                         cur_tracking_window->regionWidget->regions[index].get();
                 image::vector<3,float> pos = std::accumulate(cur_region.begin(),cur_region.end(),image::vector<3,float>(0,0,0));
                 pos /= cur_region.size();
-                region_table[pos[0] > (geo[0] >> 1) ? pos[1]-geo[1]:geo[1]-pos[1]] = std::make_pair(cur_region,cur_tracking_window->regionWidget->item(index,0)->text().toLocal8Bit().begin());
+                region_table.insert(std::make_pair((float)(pos[0] > (geo[0] >> 1) ? pos[1]-geo[1]:geo[1]-pos[1]),
+                                                   std::make_pair(cur_region,std::string(cur_tracking_window->regionWidget->item(index,0)->text().toLocal8Bit().begin()))));
             }
             data.set_regions(region_table);
         }
     else
     {
-        if(cur_tracking_window->handle->fib_data.trans_to_mni.empty())
+        if(cur_tracking_window->handle->trans_to_mni.empty())
             return;
         image::basic_image<image::vector<3,float>,3 > mni_position(geo);
-        const FiberDirection& fib = cur_tracking_window->handle->fib_data.fib;
+        const FiberDirection& fib = cur_tracking_window->handle->fib;
         for (image::pixel_index<3>index; index.is_valid(geo);index.next(geo))
             if(fib.getFA(index.index(),0) > 0)
             {
@@ -138,7 +140,8 @@ void connectivity_matrix_dialog::on_save_as_clicked()
                 "Save as",
                 cur_tracking_window->get_path("connectivity_matrix") + "/" +
                 cur_tracking_window->tractWidget->item(
-                    cur_tracking_window->tractWidget->currentRow(),0)->text() + ".mat",
+                    cur_tracking_window->tractWidget->currentRow(),0)->text() + "_" +
+                ui->region_list->currentText() + ".mat",
                 "MAT File (*.mat);;Image Files (*.png *.tif *.bmp)");
     if(filename.isEmpty())
         return;

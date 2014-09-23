@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'reconstruction_window.ui'
 **
-** Created: Thu Jul 10 14:52:00 2014
+** Created: Mon Sep 22 17:03:30 2014
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -37,6 +37,7 @@
 #include <QToolBox>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QTextBrowser>
 #include <QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -68,7 +69,11 @@ public:
     QHBoxLayout *horizontalLayout_21;
     QPushButton *delete_2;
     QSpacerItem *horizontalSpacer_5;
+    QWidget *widget_3;
+    QVBoxLayout *verticalLayout_11;
+    QSplitter *splitter_2;
     QTableWidget *b_table;
+    QTextBrowser *report;
     QWidget *source_widget;
     QVBoxLayout *verticalLayout_6;
     QHBoxLayout *horizontalLayout_11;
@@ -193,11 +198,6 @@ public:
     QHBoxLayout *horizontalLayout_6;
     QLabel *label_3;
     QSpinBox *NumOfFibers;
-    QHBoxLayout *horizontalLayout_18;
-    QSpacerItem *horizontalSpacer_8;
-    QCheckBox *check_btable;
-    QCheckBox *balance_scheme;
-    QCheckBox *HalfSphere;
     QSpacerItem *verticalSpacer;
     QWidget *widget;
     QHBoxLayout *horizontalLayout_20;
@@ -213,7 +213,7 @@ public:
     {
         if (reconstruction_window->objectName().isEmpty())
             reconstruction_window->setObjectName(QString::fromUtf8("reconstruction_window"));
-        reconstruction_window->resize(554, 542);
+        reconstruction_window->resize(597, 560);
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -257,7 +257,7 @@ public:
         toolBox->setObjectName(QString::fromUtf8("toolBox"));
         source_page = new QWidget();
         source_page->setObjectName(QString::fromUtf8("source_page"));
-        source_page->setGeometry(QRect(0, 0, 554, 455));
+        source_page->setGeometry(QRect(0, 0, 267, 195));
         horizontalLayout_25 = new QHBoxLayout(source_page);
         horizontalLayout_25->setObjectName(QString::fromUtf8("horizontalLayout_25"));
         splitter = new QSplitter(source_page);
@@ -270,7 +270,7 @@ public:
         verticalLayout_4->setContentsMargins(0, 0, 0, 0);
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
         verticalLayout_8 = new QVBoxLayout();
-        verticalLayout_8->setSpacing(0);
+        verticalLayout_8->setSpacing(6);
         verticalLayout_8->setObjectName(QString::fromUtf8("verticalLayout_8"));
         horizontalLayout_21 = new QHBoxLayout();
         horizontalLayout_21->setSpacing(0);
@@ -288,7 +288,17 @@ public:
 
         verticalLayout_8->addLayout(horizontalLayout_21);
 
-        b_table = new QTableWidget(widget_2);
+        widget_3 = new QWidget(widget_2);
+        widget_3->setObjectName(QString::fromUtf8("widget_3"));
+        widget_3->setMinimumSize(QSize(0, 0));
+        verticalLayout_11 = new QVBoxLayout(widget_3);
+        verticalLayout_11->setSpacing(0);
+        verticalLayout_11->setContentsMargins(0, 0, 0, 0);
+        verticalLayout_11->setObjectName(QString::fromUtf8("verticalLayout_11"));
+        splitter_2 = new QSplitter(widget_3);
+        splitter_2->setObjectName(QString::fromUtf8("splitter_2"));
+        splitter_2->setOrientation(Qt::Vertical);
+        b_table = new QTableWidget(splitter_2);
         if (b_table->columnCount() < 4)
             b_table->setColumnCount(4);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
@@ -302,8 +312,17 @@ public:
         b_table->setObjectName(QString::fromUtf8("b_table"));
         b_table->setSelectionMode(QAbstractItemView::SingleSelection);
         b_table->setSelectionBehavior(QAbstractItemView::SelectRows);
+        splitter_2->addWidget(b_table);
+        report = new QTextBrowser(splitter_2);
+        report->setObjectName(QString::fromUtf8("report"));
+        sizePolicy.setHeightForWidth(report->sizePolicy().hasHeightForWidth());
+        report->setSizePolicy(sizePolicy);
+        splitter_2->addWidget(report);
 
-        verticalLayout_8->addWidget(b_table);
+        verticalLayout_11->addWidget(splitter_2);
+
+
+        verticalLayout_8->addWidget(widget_3);
 
 
         verticalLayout_4->addLayout(verticalLayout_8);
@@ -377,7 +396,7 @@ public:
         toolBox->addItem(source_page, QString::fromUtf8("Source Images"));
         page_3 = new QWidget();
         page_3->setObjectName(QString::fromUtf8("page_3"));
-        page_3->setGeometry(QRect(0, 0, 554, 455));
+        page_3->setGeometry(QRect(0, 0, 534, 146));
         gridLayout_2 = new QGridLayout(page_3);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
         verticalLayout_5 = new QVBoxLayout();
@@ -454,7 +473,7 @@ public:
         toolBox->addItem(page_3, QString::fromUtf8("Step 1: setup brain mask"));
         page = new QWidget();
         page->setObjectName(QString::fromUtf8("page"));
-        page->setGeometry(QRect(0, -60, 537, 515));
+        page->setGeometry(QRect(0, 0, 580, 487));
         page->setMinimumSize(QSize(0, 0));
         verticalLayout_2 = new QVBoxLayout(page);
         verticalLayout_2->setSpacing(3);
@@ -715,7 +734,7 @@ public:
         hardi_reg = new QDoubleSpinBox(hardi_param);
         hardi_reg->setObjectName(QString::fromUtf8("hardi_reg"));
         hardi_reg->setMaximumSize(QSize(75, 16777215));
-        hardi_reg->setDecimals(3);
+        hardi_reg->setDecimals(4);
         hardi_reg->setMinimum(0.001);
         hardi_reg->setMaximum(1);
         hardi_reg->setSingleStep(0.01);
@@ -983,32 +1002,6 @@ public:
 
         verticalLayout_9->addLayout(horizontalLayout_17);
 
-        horizontalLayout_18 = new QHBoxLayout();
-        horizontalLayout_18->setObjectName(QString::fromUtf8("horizontalLayout_18"));
-        horizontalSpacer_8 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_18->addItem(horizontalSpacer_8);
-
-        check_btable = new QCheckBox(groupBox_2);
-        check_btable->setObjectName(QString::fromUtf8("check_btable"));
-        check_btable->setChecked(true);
-
-        horizontalLayout_18->addWidget(check_btable);
-
-        balance_scheme = new QCheckBox(groupBox_2);
-        balance_scheme->setObjectName(QString::fromUtf8("balance_scheme"));
-
-        horizontalLayout_18->addWidget(balance_scheme);
-
-        HalfSphere = new QCheckBox(groupBox_2);
-        HalfSphere->setObjectName(QString::fromUtf8("HalfSphere"));
-        HalfSphere->setChecked(false);
-
-        horizontalLayout_18->addWidget(HalfSphere);
-
-
-        verticalLayout_9->addLayout(horizontalLayout_18);
-
 
         verticalLayout_7->addWidget(groupBox_2);
 
@@ -1065,7 +1058,7 @@ public:
         reconstruction_window->setCentralWidget(centralwidget);
         menuBar = new QMenuBar(reconstruction_window);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 554, 21));
+        menuBar->setGeometry(QRect(0, 0, 597, 21));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menu_Edit = new QMenu(menuBar);
@@ -1203,14 +1196,11 @@ public:
          << QApplication::translate("reconstruction_window", "20-fold", 0)
         );
         label_3->setText(QApplication::translate("reconstruction_window", "Number of fibers resolved", 0));
-        check_btable->setText(QApplication::translate("reconstruction_window", "Check btable", 0));
-        balance_scheme->setText(QApplication::translate("reconstruction_window", "Balance scheme", 0));
-        HalfSphere->setText(QApplication::translate("reconstruction_window", "Half-sphere scheme", 0));
-        label_9->setText(QApplication::translate("reconstruction_window", "Parallel reconstruction:", 0));
+        label_9->setText(QApplication::translate("reconstruction_window", "multi-thread:", 0));
         doDTI->setText(QApplication::translate("reconstruction_window", "Run reconstruction", 0));
         doDTI->setDescription(QString());
         toolBox->setItemText(toolBox->indexOf(page), QApplication::translate("reconstruction_window", "Step 2: select reconstruction method", 0));
-        menuFile->setTitle(QApplication::translate("reconstruction_window", "&File", 0));
+        menuFile->setTitle(QApplication::translate("reconstruction_window", "File", 0));
         menu_Edit->setTitle(QApplication::translate("reconstruction_window", "&Edit", 0));
     } // retranslateUi
 

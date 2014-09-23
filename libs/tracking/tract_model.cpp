@@ -5,11 +5,11 @@
 #include <set>
 #include <map>
 #include "tract_model.hpp"
-#include "tracking_static_link.h"
 #include "prog_interface_static_link.h"
-#include "libs/tracking/tracking_model.hpp"
+#include "fib_data.hpp"
 #include "gzip_interface.hpp"
 #include "mapping/atlas.hpp"
+#include "gzip_interface.hpp"
 
 
 struct TrackVis
@@ -69,9 +69,9 @@ struct TrackVis
     }
 };
 //---------------------------------------------------------------------------
-TractModel::TractModel(ODFModel* handle_):handle(handle_),geometry(handle_->fib_data.dim),vs(handle_->fib_data.vs),fib(new fiber_orientations)
+TractModel::TractModel(FibData* handle_):handle(handle_),geometry(handle_->dim),vs(handle_->vs),fib(new fiber_orientations)
 {
-    fib->read(handle_->fib_data);
+    fib->read(*handle_);
 }
 //---------------------------------------------------------------------------
 void TractModel::add(const TractModel& rhs)
@@ -97,40 +97,16 @@ bool TractModel::load_from_file(const char* file_name_,bool append)
     std::string file_name(file_name_);
     std::vector<std::vector<float> > loaded_tract_data;
     std::vector<unsigned int> loaded_tract_cluster;
-    if (file_name.find(".txt") != std::string::npos)
-    {
-        std::ifstream in(file_name_);
-        if (!in)
-            return false;
-        std::string line;
-        in.seekg(0,std::ios::end);
-        unsigned int total = in.tellg();
-        in.seekg(0,std::ios::beg);
-        begin_prog("loading");
-        while (std::getline(in,line))
-        {
-            check_prog(in.tellg(),total);
-            loaded_tract_data.push_back(std::vector<float>());
-            std::istringstream in(line);
-            std::copy(std::istream_iterator<float>(in),
-                      std::istream_iterator<float>(),std::back_inserter(loaded_tract_data.back()));
-            if (loaded_tract_data.back().size() < 6)
-            {
-                if(loaded_tract_data.back().size() == 1)// cluster info
-                    loaded_tract_cluster.push_back(loaded_tract_data.back()[0]);
-                loaded_tract_data.pop_back();
-                continue;
-            }
-        }
 
-    }
-    else
-        //trackvis
-        if (file_name.find(".trk") != std::string::npos)
+    std::string ext;
+    if(file_name.length() > 4)
+        ext = std::string(file_name.end()-4,file_name.end());
+
+    if(ext == std::string(".trk") || ext == std::string("k.gz"))
         {
             TrackVis trk;
-            std::ifstream in(file_name_,std::ios::binary);
-            if (!in)
+            gz_istream in;
+            if (!in.open(file_name_))
                 return false;
             in.read((char*)&trk,1000);
             //if (geo != geometry)
@@ -164,7 +140,35 @@ bool TractModel::load_from_file(const char* file_name_,bool append)
             }
         }
         else
-            if (file_name.find(".mat") != std::string::npos)
+        if (ext == std::string(".txt"))
+        {
+            std::ifstream in(file_name_);
+            if (!in)
+                return false;
+            std::string line;
+            in.seekg(0,std::ios::end);
+            unsigned int total = in.tellg();
+            in.seekg(0,std::ios::beg);
+            begin_prog("loading");
+            while (std::getline(in,line))
+            {
+                check_prog(in.tellg(),total);
+                loaded_tract_data.push_back(std::vector<float>());
+                std::istringstream in(line);
+                std::copy(std::istream_iterator<float>(in),
+                          std::istream_iterator<float>(),std::back_inserter(loaded_tract_data.back()));
+                if (loaded_tract_data.back().size() < 6)
+                {
+                    if(loaded_tract_data.back().size() == 1)// cluster info
+                        loaded_tract_cluster.push_back(loaded_tract_data.back()[0]);
+                    loaded_tract_data.pop_back();
+                    continue;
+                }
+            }
+
+        }
+        else
+            if (ext == std::string(".mat"))
             {
                 gz_mat_read in;
                 if(!in.load_from_file(file_name_))
@@ -189,7 +193,7 @@ bool TractModel::load_from_file(const char* file_name_,bool append)
                 }
             }
     else
-                if (file_name.find(".tck") != std::string::npos)
+                if (ext == std::string(".tck"))
                 {
                     unsigned int offset = 0;
                     {
@@ -227,7 +231,7 @@ bool TractModel::load_from_file(const char* file_name_,bool append)
                         std::copy((const float*)&*buf.begin() + index,
                                   (const float*)&*buf.begin() + end,
                                   loaded_tract_data.back().begin());
-                        image::divide_constant(loaded_tract_data.back().begin(),loaded_tract_data.back().end(),handle->fib_data.vs[0]);
+                        image::divide_constant(loaded_tract_data.back().begin(),loaded_tract_data.back().end(),handle->vs[0]);
                         index = end+3;
                     }
 
@@ -293,26 +297,16 @@ bool TractModel::save_data_to_file(const char* file_name,const std::string& inde
 bool TractModel::save_tracts_to_file(const char* file_name_)
 {
     std::string file_name(file_name_);
-    if (file_name.find(".txt") != std::string::npos)
-    {
-        std::ofstream out(file_name_,std::ios::binary);
-        if (!out)
-            return false;
-        begin_prog("saving");
-        for (unsigned int i = 0;check_prog(i,tract_data.size());++i)
-        {
-            std::copy(tract_data[i].begin(),
-                      tract_data[i].end(),
-                      std::ostream_iterator<float>(out," "));
-            out << std::endl;
-        }
-        return true;
-    }
+    std::string ext;
+    if(file_name.length() > 4)
+        ext = std::string(file_name.end()-4,file_name.end());
 
-    if (file_name.find(".trk") != std::string::npos)
+    if (ext == std::string(".trk") || ext == std::string("k.gz"))
     {
-        std::ofstream out(file_name_,std::ios::binary);
-        if (!out)
+        if(ext == std::string(".trk"))
+            file_name += ".gz";
+        gz_ostream out;
+        if (!out.open(file_name.c_str()))
             return false;
         {
             TrackVis trk;
@@ -339,7 +333,22 @@ bool TractModel::save_tracts_to_file(const char* file_name_)
         }
         return true;
     }
-    if (file_name.find(".mat") != std::string::npos)
+    if (ext == std::string(".txt"))
+    {
+        std::ofstream out(file_name_,std::ios::binary);
+        if (!out)
+            return false;
+        begin_prog("saving");
+        for (unsigned int i = 0;check_prog(i,tract_data.size());++i)
+        {
+            std::copy(tract_data[i].begin(),
+                      tract_data[i].end(),
+                      std::ostream_iterator<float>(out," "));
+            out << std::endl;
+        }
+        return true;
+    }
+    if (ext == std::string(".mat"))
     {
         image::io::mat_write out(file_name.c_str());
         if(!out)
@@ -387,6 +396,7 @@ bool TractModel::save_all(const char* file_name_,const std::vector<TractModel*>&
         std::ofstream out(file_name_,std::ios::binary);
         if (!out)
             return false;
+        begin_prog("saving");
         {
             TrackVis trk;
             trk.init(all[0]->geometry,all[0]->vs);
@@ -397,7 +407,6 @@ bool TractModel::save_all(const char* file_name_,const std::vector<TractModel*>&
             out.write((const char*)&trk,1000);
 
         }
-        begin_prog("saving");
         for(unsigned int index = 0;check_prog(index,all.size());++index)
         for (unsigned int i = 0;i < all[index]->tract_data.size();++i)
         {
@@ -464,13 +473,17 @@ bool TractModel::load_tracts_color_from_file(const char* file_name)
     std::ifstream in(file_name);
     if (!in)
         return false;
-    std::vector<int> colors;
-    std::copy(std::istream_iterator<int>(in),
-              std::istream_iterator<int>(),
+    std::vector<float> colors;
+    std::copy(std::istream_iterator<float>(in),
+              std::istream_iterator<float>(),
               std::back_inserter(colors));
-    std::copy(colors.begin(),
-              colors.begin()+std::min(colors.size(),tract_color.size()),
-              tract_color.begin());
+    if(colors.size() <= tract_color.size())
+        std::copy(colors.begin(),colors.begin()+colors.size(),tract_color.begin());
+    if(colors.size()/3 <= tract_color.size())
+        for(unsigned int index = 0,pos = 0;pos+2 < colors.size();++index,pos += 3)
+            tract_color[index] = image::rgb_color(std::min<int>(colors[pos],255),
+                                                  std::min<int>(colors[pos+1],255),
+                                                  std::min<int>(colors[pos+2],255));
     return true;
 }
 //---------------------------------------------------------------------------
@@ -479,9 +492,12 @@ bool TractModel::save_tracts_color_to_file(const char* file_name)
     std::ofstream out(file_name);
     if (!out)
         return false;
-    std::copy(tract_color.begin(),
-              tract_color.end(),
-              std::ostream_iterator<int>(out," "));
+    for(unsigned int index = 0;index < tract_color.size();++index)
+    {
+        image::rgb_color color;
+        color.color = tract_color[index];
+        out << (int)color.r << " " << (int)color.g << " " << (int)color.b << std::endl;
+    }
     return out;
 }
 
@@ -874,6 +890,20 @@ void TractModel::add_tracts(std::vector<std::vector<float> >& new_tract)
         tract_color.push_back(def_color);
     }
 }
+
+void TractModel::add_tracts(std::vector<std::vector<float> >& new_tract, unsigned int length_threshold)
+{
+    tract_data.reserve(tract_data.size()+new_tract.size()/2.0);
+    image::rgb_color def_color(200,100,30);
+    for (unsigned int index = 0;index < new_tract.size();++index)
+    {
+        if (new_tract[index].size()/3-1 < length_threshold)
+            continue;
+        tract_data.push_back(std::vector<float>());
+        tract_data.back().swap(new_tract[index]);
+        tract_color.push_back(def_color);
+    }
+}
 //---------------------------------------------------------------------------
 void TractModel::get_density_map(image::basic_image<unsigned int,3>& mapping,
                                  const std::vector<float>& transformation,bool endpoint)
@@ -1025,9 +1055,9 @@ void TractModel::get_quantitative_data(std::vector<float>& data)
 
     // output mean and std of each index
     for(int data_index = 0;
-        data_index < handle->fib_data.view_item.size();++data_index)
+        data_index < handle->view_item.size();++data_index)
     {
-        if(data_index > 0 && data_index < handle->fib_data.other_mapping_index)
+        if(data_index > 0 && data_index < handle->other_mapping_index)
             continue;
 
         float sum_data = 0.0;
@@ -1061,7 +1091,7 @@ void TractModel::get_quantitative_info(std::string& result)
     std::ostringstream out;
     std::vector<std::string> titles;
     std::vector<float> data;
-    out << handle->fib_data.report.c_str() << report.c_str() << std::endl;
+    out << handle->report.c_str() << report.c_str() << std::endl;
     titles.push_back("number of tracts");
     titles.push_back("tract length mean(mm)");
     titles.push_back("tract length sd(mm)");
@@ -1171,11 +1201,11 @@ void TractModel::get_tract_data(unsigned int fiber_index,
                     std::vector<float>& data)
 {
     data.clear();
-    if(index_num >= handle->fib_data.view_item.size())
+    if(index_num >= handle->view_item.size())
         return;
     data.resize(tract_data[fiber_index].size()/3);
     for (unsigned int data_index = 0,index = 0;index < tract_data[fiber_index].size();index += 3,++data_index)
-        image::linear_estimate(handle->fib_data.view_item[index_num].image_data,&(tract_data[fiber_index][index]),data[data_index]);
+        image::linear_estimate(handle->view_item[index_num].image_data,&(tract_data[fiber_index][index]),data[data_index]);
 }
 
 void TractModel::get_tracts_data(
@@ -1184,11 +1214,40 @@ void TractModel::get_tracts_data(
 {
     data.clear();
     unsigned int index_num = handle->get_name_index(index_name);
-    if(index_num == handle->fib_data.view_item.size())
+    if(index_num == handle->view_item.size())
         return;
     data.resize(tract_data.size());
     for (unsigned int i = 0;i < tract_data.size();++i)
         get_tract_data(i,index_num,data[i]);
+}
+
+template<typename input_iterator,typename output_iterator>
+void gradient(input_iterator from,input_iterator to,output_iterator out)
+{
+    if(from == to)
+        return;
+    --to;
+    if(from == to)
+        return;
+    *out = *(from+1);
+    *out -= *(from);
+    output_iterator last = out + (to-from);
+    *last = *to;
+    *last -= *(to-1);
+    input_iterator pre_from = from;
+    ++from;
+    ++out;
+    input_iterator next_from = from;
+    ++next_from;
+    for(;from != to;++out)
+    {
+        *out = *(next_from);
+        *out -= *(pre_from);
+        *out /= 2.0;
+        pre_from = from;
+        from = next_from;
+        ++next_from;
+    }
 }
 
 void TractModel::get_tract_fa(unsigned int fiber_index,std::vector<float>& data)
@@ -1372,8 +1431,8 @@ void ConnectivityMatrix::set_atlas(const atlas& data,const image::basic_image<im
             if(mni_position[index.index()] != null &&
                data.label_matched(data.get_label_at(mni_position[index.index()]),label_index))
                 cur_region.push_back(image::vector<3,short>(index.begin()));
-        if(!cur_region.empty())
-            region_table[atlas_region_order[label_index]] = std::make_pair(cur_region,data.get_list()[label_index]);
+        region_table.insert(std::make_pair(atlas_region_order[label_index],
+                                               std::make_pair(cur_region,data.get_list()[label_index])));
     }
     set_regions(region_table);
 }

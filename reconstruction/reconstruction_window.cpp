@@ -41,6 +41,7 @@ reconstruction_window::reconstruction_window(QStringList filenames_,QWidget *par
 
     ui->setupUi(this);
     load_src(0);
+
     ui->toolBox->setCurrentIndex(1);
     ui->graphicsView->setScene(&scene);
     ui->view_source->setScene(&source);
@@ -85,7 +86,6 @@ reconstruction_window::reconstruction_window(QStringList filenames_,QWidget *par
     }
     ui->AdvancedWidget->setVisible(false);
     ui->ThreadCount->setValue(settings.value("rec_thread_num",2).toInt());
-    ui->HalfSphere->setChecked(settings.value("rec_half_sphere",0).toInt());
     ui->NumOfFibers->setValue(settings.value("rec_num_fiber",5).toInt());
     ui->ODFDef->setCurrentIndex(settings.value("rec_gqi_def",0).toInt());
     ui->reg_method->setCurrentIndex(settings.value("rec_reg_method",1).toInt());
@@ -106,8 +106,6 @@ reconstruction_window::reconstruction_window(QStringList filenames_,QWidget *par
     ui->RecordODF->setChecked(settings.value("rec_record_odf",0).toInt());
     ui->output_jacobian->setChecked(settings.value("output_jacobian",0).toInt());
     ui->output_mapping->setChecked(settings.value("output_mapping",0).toInt());
-    ui->balance_scheme->setChecked(settings.value("balance_scheme",0).toInt());
-    ui->check_btable->setChecked(settings.value("check_btable",1).toInt());
 
     ui->hardi_bvalue->setValue(settings.value("hardi_bvalue",3000).toDouble());
     ui->hardi_reg->setValue(settings.value("hardi_reg",0.05).toDouble());
@@ -207,6 +205,7 @@ void reconstruction_window::doReconstruction(unsigned char method_id,bool prompt
 {
     if(!handle.get())
         return;
+
     if(method_id == 7)
         std::fill(handle->mask.begin(),handle->mask.end(),1.0);
     else
@@ -229,12 +228,9 @@ void reconstruction_window::doReconstruction(unsigned char method_id,bool prompt
         settings.setValue("rec_decom_m",params[4]);
     }
 
-
-
     settings.setValue("rec_method_id",method_id);
     settings.setValue("rec_thread_num",ui->ThreadCount->value());
     settings.setValue("rec_odf_sharpening",ui->odf_sharpening->currentIndex());
-    settings.setValue("rec_half_sphere",ui->HalfSphere->isChecked() ? 1 : 0);
     settings.setValue("rec_num_fiber",ui->NumOfFibers->value());
     settings.setValue("rec_gqi_def",ui->ODFDef->currentIndex());
     settings.setValue("rec_reg_method",ui->reg_method->currentIndex());
@@ -243,10 +239,6 @@ void reconstruction_window::doReconstruction(unsigned char method_id,bool prompt
     settings.setValue("rec_record_odf",ui->RecordODF->isChecked() ? 1 : 0);
     settings.setValue("output_jacobian",ui->output_jacobian->isChecked() ? 1 : 0);
     settings.setValue("output_mapping",ui->output_mapping->isChecked() ? 1 : 0);
-    settings.setValue("balance_scheme",ui->balance_scheme->isChecked() ? 1 : 0);
-    settings.setValue("check_btable",ui->check_btable->isChecked() ? 1 : 0);
-
-
 
     begin_prog("run reconstruction",true);
     int odf_order[8] = {4, 5, 6, 8, 10, 12, 16, 20};
@@ -257,20 +249,15 @@ void reconstruction_window::doReconstruction(unsigned char method_id,bool prompt
     handle->voxel.odf_xyz[0] = ui->x->value();
     handle->voxel.odf_xyz[1] = ui->y->value();
     handle->voxel.odf_xyz[2] = ui->z->value();
-    handle->voxel.half_sphere = ui->HalfSphere->isChecked() ? 1 : 0;
     handle->voxel.max_fiber_number = ui->NumOfFibers->value();
     handle->voxel.r2_weighted = ui->ODFDef->currentIndex();
     handle->voxel.reg_method = ui->reg_method->currentIndex();
-
-    handle->voxel.scheme_balance = ui->balance_scheme->isChecked();
-    handle->voxel.check_btable = ui->check_btable->isChecked();
 
     handle->voxel.need_odf = ui->RecordODF->isChecked() ? 1 : 0;
     handle->voxel.output_jacobian = ui->output_jacobian->isChecked() ? 1 : 0;
     handle->voxel.output_mapping = ui->output_mapping->isChecked() ? 1 : 0;
 
     const char* msg = (const char*)reconstruction(handle.get(), method_id, params);
-    end_prog();
     if (!QFileInfo(msg).exists())
     {
         QMessageBox::information(this,"error",msg,0);
@@ -465,6 +452,7 @@ void reconstruction_window::on_DTI_toggled(bool checked)
     ui->RecordODF->setVisible(!checked);
 
     ui->hardi_param->setVisible(!checked);
+
 }
 
 void reconstruction_window::on_DSI_toggled(bool checked)
@@ -516,6 +504,7 @@ void reconstruction_window::on_GQI_toggled(bool checked)
     ui->RecordODF->setVisible(checked);
 
     ui->hardi_param->setVisible(!checked);
+
 }
 void reconstruction_window::on_HARDI_toggled(bool checked)
 {
@@ -550,6 +539,7 @@ void reconstruction_window::on_QDif_toggled(bool checked)
     ui->RecordODF->setVisible(checked);
 
     ui->hardi_param->setVisible(!checked);
+
 }
 
 
@@ -585,12 +575,7 @@ void reconstruction_window::on_zoom_out_clicked()
 extern fa_template fa_template_imp;
 void reconstruction_window::on_manual_reg_clicked()
 {
-    image::affine_transform<3,float> arg;
-    arg.scaling[0] = handle->voxel.vs[0];
-    arg.scaling[1] = handle->voxel.vs[1];
-    arg.scaling[2] = handle->voxel.vs[2];
-    image::reg::align_center(dwi,fa_template_imp.I,arg);
-    std::auto_ptr<manual_alignment> manual(new manual_alignment(this,dwi,fa_template_imp.I,arg));
+    std::auto_ptr<manual_alignment> manual(new manual_alignment(this,dwi,fa_template_imp.I,handle->voxel.vs));
     manual->timer->start();
     if(manual->exec() == QDialog::Accepted)
         handle->voxel.qsdr_trans = manual->T;
@@ -626,6 +611,22 @@ void reconstruction_window::on_AdvancedOptions_clicked()
 
 void reconstruction_window::on_actionSave_4D_nifti_triggered()
 {
+    if(filenames.size() > 1)
+    {
+        for(int index = 0;check_prog(index,filenames.size());++index)
+        {
+            ImageModel model;
+            if (!model.load_from_file(filenames[index].toLocal8Bit().begin()))
+            {
+                QMessageBox::information(this,"error",QString("Cannot open ") +
+                    filenames[index] + " : " +handle->error_msg.c_str(),0);
+                check_prog(0,0);
+                return;
+            }
+            model.save_to_nii((filenames[index]+".nii.gz").toLocal8Bit().begin());
+        }
+        return;
+    }
     QString filename = QFileDialog::getSaveFileName(
                                 this,
                                 "Save image as...",
@@ -633,28 +634,7 @@ void reconstruction_window::on_actionSave_4D_nifti_triggered()
                                 "All files (*)" );
     if ( filename.isEmpty() )
         return;
-    gz_nifti header;
-    {
-        float vs[4];
-        std::copy(handle->voxel.vs.begin(),handle->voxel.vs.end(),vs);
-        vs[3] = 1.0;
-        header.set_voxel_size(vs);
-    }
-    {
-        image::geometry<4> nifti_dim;
-        std::copy(handle->voxel.dim.begin(),handle->voxel.dim.end(),nifti_dim.begin());
-        nifti_dim[3] = handle->voxel.bvalues.size();
-        image::basic_image<float,4> buffer(nifti_dim);
-        for(unsigned int index = 0;index < handle->voxel.bvalues.size();++index)
-        {
-            std::copy(handle->dwi_data[index],
-                      handle->dwi_data[index]+handle->voxel.dim.size(),
-                      buffer.begin() + index*handle->voxel.dim.size());
-        }
-        image::flip_xy(buffer);
-        header << buffer;
-        header.save_to_file(filename.toLocal8Bit().begin());
-    }
+    handle->save_to_nii(filename.toLocal8Bit().begin());
 }
 
 void reconstruction_window::on_actionSave_b_table_triggered()
@@ -666,14 +646,7 @@ void reconstruction_window::on_actionSave_b_table_triggered()
                                 "Text files (*.txt)" );
     if ( filename.isEmpty() )
         return;
-    std::ofstream out(filename.toLocal8Bit().begin());
-    for(unsigned int index = 0;index < handle->voxel.bvalues.size();++index)
-    {
-        out << handle->voxel.bvalues[index] << " "
-            << handle->voxel.bvectors[index][0] << " "
-            << handle->voxel.bvectors[index][1] << " "
-            << handle->voxel.bvectors[index][2] << std::endl;
-    }
+    handle->save_b_table(filename.toLocal8Bit().begin());
 }
 
 void reconstruction_window::on_actionSave_bvals_triggered()
@@ -685,13 +658,7 @@ void reconstruction_window::on_actionSave_bvals_triggered()
                                 "Text files (*)" );
     if ( filename.isEmpty() )
         return;
-    std::ofstream out(filename.toLocal8Bit().begin());
-    for(unsigned int index = 0;index < handle->voxel.bvalues.size();++index)
-    {
-        if(index)
-            out << " ";
-        out << handle->voxel.bvalues[index];
-    }
+    handle->save_bval(filename.toLocal8Bit().begin());
 }
 
 void reconstruction_window::on_actionSave_bvecs_triggered()
@@ -703,13 +670,7 @@ void reconstruction_window::on_actionSave_bvecs_triggered()
                                 "Text files (*)" );
     if ( filename.isEmpty() )
         return;
-    std::ofstream out(filename.toLocal8Bit().begin());
-    for(unsigned int index = 0;index < handle->voxel.bvalues.size();++index)
-    {
-        out << handle->voxel.bvectors[index][0] << " "
-            << handle->voxel.bvectors[index][1] << " "
-            << handle->voxel.bvectors[index][2] << std::endl;
-    }
+    handle->save_bvec(filename.toLocal8Bit().begin());
 }
 
 void reconstruction_window::update_image(void)
@@ -769,12 +730,7 @@ void reconstruction_window::on_actionFlip_xz_triggered()
 
 void reconstruction_window::on_actionRotate_triggered()
 {
-    image::affine_transform<3,float> arg;
-    arg.scaling[0] = handle->voxel.vs[0];
-    arg.scaling[1] = handle->voxel.vs[1];
-    arg.scaling[2] = handle->voxel.vs[2];
-    image::reg::align_center(dwi,fa_template_imp.I,arg);
-    std::auto_ptr<manual_alignment> manual(new manual_alignment(this,dwi,fa_template_imp.I,arg,image::reg::rigid_body));
+    std::auto_ptr<manual_alignment> manual(new manual_alignment(this,dwi,fa_template_imp.I,handle->voxel.vs,image::reg::rigid_body));
     manual->timer->start();
     if(manual->exec() != QDialog::Accepted)
         return;

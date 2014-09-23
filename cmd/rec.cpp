@@ -43,6 +43,7 @@ int rec(int ac, char *av[])
     ("param1", po::value<float>(), "set parameters")
     ("param2", po::value<float>(), "set parameters")
     ("param3", po::value<float>(), "set parameters")
+    ("flip", po::value<std::string>(), "flip image volume")
     ;
 
     if(!ac)
@@ -63,7 +64,16 @@ int rec(int ac, char *av[])
         return 1;
     }
     std::cout << "src loaded" <<std::endl;
-
+    if (vm.count("flip"))
+    {
+        std::string flip_seq = vm["flip"].as<std::string>();
+        for(unsigned int index = 0;index < flip_seq.length();++index)
+            if(flip_seq[index] >= '0' && flip_seq[index] <= '5')
+            {
+                handle->flip(flip_seq[index]-'0');
+                std::cout << "Flip image volume:" << (int)flip_seq[index]-'0' << std::endl;
+            }
+    }
     // apply affine transformation
     if (vm.count("affine"))
     {
@@ -164,14 +174,9 @@ int rec(int ac, char *av[])
     handle->voxel.output_mapping = vm["output_map"].as<int>();
     handle->voxel.odf_deconvolusion = vm["deconvolution"].as<int>();
     handle->voxel.odf_decomposition = vm["decomposition"].as<int>();
-    handle->voxel.half_sphere = vm["half_sphere"].as<int>();
     handle->voxel.max_fiber_number = vm["num_fiber"].as<int>();
     handle->voxel.r2_weighted = vm["r2_weighted"].as<int>();
     handle->voxel.reg_method = vm["reg_method"].as<int>();
-    handle->voxel.scheme_balance = vm["scheme_balance"].as<int>();
-    handle->voxel.check_btable = vm["check_btable"].as<int>();
-
-
 
     {
         std::cout << "odf_order=" << vm["odf_order"].as<int>() << std::endl;
@@ -182,8 +187,6 @@ int rec(int ac, char *av[])
             std::cout << "apply deconvolution" << std::endl;
         if(handle->voxel.odf_decomposition)
             std::cout << "apply decomposition" << std::endl;
-        if(handle->voxel.half_sphere)
-            std::cout << "half sphere is used" << std::endl;
         if(handle->voxel.r2_weighted && method_index == 4)
             std::cout << "r2 weighted is used for GQI" << std::endl;
     }

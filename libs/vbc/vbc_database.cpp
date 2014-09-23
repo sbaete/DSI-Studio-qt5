@@ -3,7 +3,7 @@
 #include <boost/thread.hpp>
 #include <boost/math/distributions/students_t.hpp>
 #include "vbc_database.h"
-#include "libs/tracking/tracking_model.hpp"
+#include "fib_data.hpp"
 #include "libs/tracking/tract_model.hpp"
 #include "libs/tracking/tracking_thread.hpp"
 
@@ -15,14 +15,14 @@ vbc_database::vbc_database():handle(0),num_subjects(0)
 
 void vbc_database::read_template(void)
 {
-    dim = (handle->fib_data.dim);
-    num_fiber = handle->fib_data.fib.fa.size();
+    dim = (handle->dim);
+    num_fiber = handle->fib.fa.size();
     findex.resize(num_fiber);
     fa.resize(num_fiber);
     for(unsigned int index = 0;index < num_fiber;++index)
     {
-        findex[index] = handle->fib_data.fib.findex[index];
-        fa[index] = handle->fib_data.fib.fa[index];
+        findex[index] = handle->fib.findex[index];
+        fa[index] = handle->fib.fa[index];
     }
     fiber_threshold = 0.6*image::segmentation::otsu_threshold(image::make_image(dim,fa[0]));
     vi2si.resize(dim.size());
@@ -34,21 +34,21 @@ void vbc_database::read_template(void)
             si2vi.push_back(index);
         }
     }
-    vertices = handle->fib_data.fib.odf_table;
+    vertices = handle->fib.odf_table;
     half_odf_size = vertices.size()/2;
 }
 bool vbc_database::create_database(const char* template_name)
 {
-    handle.reset(new ODFModel);
-    if(!handle->fib_data.load_from_file(template_name))
+    handle.reset(new FibData);
+    if(!handle->load_from_file(template_name))
         return false;
     read_template();
     return true;
 }
 bool vbc_database::load_database(const char* database_name)
 {
-    handle.reset(new ODFModel);
-    if(!handle->fib_data.load_from_file(database_name))
+    handle.reset(new FibData);
+    if(!handle->load_from_file(database_name))
     {
         error_msg = "Invalid fib file";
         return false;
@@ -57,7 +57,7 @@ bool vbc_database::load_database(const char* database_name)
     // read databse data
 
     // does it contain subject info?
-    gz_mat_read& matfile = handle->fib_data.mat_reader;
+    gz_mat_read& matfile = handle->mat_reader;
     subject_qa.clear();
     subject_qa_buffer.clear();
     unsigned int row,col;
@@ -262,9 +262,10 @@ void vbc_database::save_subject_data(const char* output_name) const
         error_msg = "Cannot output file";
         return;
     }
-    gz_mat_read& mat_source = handle->fib_data.mat_reader;
+    gz_mat_read& mat_source = handle->mat_reader;
     for(unsigned int index = 0;index < mat_source.size();++index)
-        if(mat_source[index].get_name() != "report")
+        if(mat_source[index].get_name() != "report" &&
+           mat_source[index].get_name().find("subject") != 0)
             matfile.write(mat_source[index]);
     for(unsigned int index = 0;check_prog(index,subject_qa.size());++index)
     {
@@ -287,7 +288,6 @@ void vbc_database::save_subject_data(const char* output_name) const
         std::string report = out.str();
         matfile.write("report",&*report.c_str(),1,report.length());
     }
-    begin_prog("output data");
 }
 
 bool vbc_database::get_odf_profile(const char* file_name,std::vector<float>& cur_subject_data)
@@ -314,10 +314,10 @@ bool vbc_database::get_odf_profile(const char* file_name,std::vector<float>& cur
 }
 
 
-void fib_data::initialize(ODFModel* handle)
+void fib_data::initialize(FibData* handle)
 {
-    unsigned char num_fiber = handle->fib_data.fib.num_fiber;
-    image::geometry<3> dim(handle->fib_data.dim);
+    unsigned char num_fiber = handle->fib.num_fiber;
+    image::geometry<3> dim(handle->dim);
     greater.resize(num_fiber);
     lesser.resize(num_fiber);
     greater_dir.resize(num_fiber);
@@ -349,106 +349,39 @@ void fib_data::initialize(ODFModel* handle)
     }
 }
 
-void fib_data::add_greater_lesser_mapping_for_tracking(ODFModel* handle)
+void fib_data::add_greater_lesser_mapping_for_tracking(FibData* handle)
 {
 
     unsigned int greater_index_id =
-            std::find(handle->fib_data.fib.index_name.begin(),
-                      handle->fib_data.fib.index_name.end(),
-                      "greater")-handle->fib_data.fib.index_name.begin();
-    if(greater_index_id == handle->fib_data.fib.index_name.size())
+            std::find(handle->fib.index_name.begin(),
+                      handle->fib.index_name.end(),
+                      "greater")-handle->fib.index_name.begin();
+    if(greater_index_id == handle->fib.index_name.size())
     {
-        handle->fib_data.fib.index_name.push_back("greater");
-        handle->fib_data.fib.index_data.push_back(std::vector<const float*>());
-        handle->fib_data.fib.index_data_dir.push_back(std::vector<const short*>());
+        handle->fib.index_name.push_back("greater");
+        handle->fib.index_data.push_back(std::vector<const float*>());
+        handle->fib.index_data_dir.push_back(std::vector<const short*>());
     }
-    handle->fib_data.fib.index_data[greater_index_id] = greater_ptr;
-    handle->fib_data.fib.index_data_dir[greater_index_id] = greater_dir_ptr;
+    handle->fib.index_data[greater_index_id] = greater_ptr;
+    handle->fib.index_data_dir[greater_index_id] = greater_dir_ptr;
 
     unsigned int lesser_index_id =
-            std::find(handle->fib_data.fib.index_name.begin(),
-                      handle->fib_data.fib.index_name.end(),
-                      "lesser")-handle->fib_data.fib.index_name.begin();
-    if(lesser_index_id == handle->fib_data.fib.index_name.size())
+            std::find(handle->fib.index_name.begin(),
+                      handle->fib.index_name.end(),
+                      "lesser")-handle->fib.index_name.begin();
+    if(lesser_index_id == handle->fib.index_name.size())
     {
-        handle->fib_data.fib.index_name.push_back("lesser");
-        handle->fib_data.fib.index_data.push_back(std::vector<const float*>());
-        handle->fib_data.fib.index_data_dir.push_back(std::vector<const short*>());
+        handle->fib.index_name.push_back("lesser");
+        handle->fib.index_data.push_back(std::vector<const float*>());
+        handle->fib.index_data_dir.push_back(std::vector<const short*>());
     }
-    handle->fib_data.fib.index_data[lesser_index_id] = lesser_ptr;
-    handle->fib_data.fib.index_data_dir[lesser_index_id] = lesser_dir_ptr;
+    handle->fib.index_data[lesser_index_id] = lesser_ptr;
+    handle->fib.index_data_dir[lesser_index_id] = lesser_dir_ptr;
 }
 
 
-void vbc_database::single_subject_analysis(const float* cur_subject_data,
-                                           float percentile,fib_data& result)
-{
-    result.initialize(handle.get());
-    std::vector<unsigned char> greater_fib_count(dim.size()),lesser_fib_count(dim.size());
-    std::vector<float> population;
 
-    for(unsigned int s_index = 0;s_index < si2vi.size();++s_index)
-    {
-        unsigned int cur_index = si2vi[s_index];
-        for(unsigned int fib = 0,fib_offset = 0;
-            fib < num_fiber && fa[fib][cur_index] > fiber_threshold;
-                ++fib,fib_offset+=si2vi.size())
-        {
-            unsigned int pos = s_index + fib_offset;
-            float cur_value = cur_subject_data[pos];
-            if(cur_value == 0.0)
-                continue;
-
-            population.clear();
-            for(unsigned int subject_id = 0;subject_id < subject_qa.size();++subject_id)
-            {
-                float value = subject_qa[subject_id][pos];
-                if(value != 0.0)
-                    population.push_back(value);
-            }
-            unsigned int greater_rank = 0;
-            unsigned int lesser_rank = 0;
-            for(unsigned int subject_id = 0;subject_id < population.size();++subject_id)
-            {
-                if(cur_value > population[subject_id])
-                    ++greater_rank;
-                if(cur_value < population[subject_id])
-                    ++lesser_rank;
-            }
-            if(population.empty())
-                continue;
-            if(greater_rank > (population.size() >> 1)) // greater
-            {
-                unsigned char fib_count = greater_fib_count[cur_index];
-                result.greater[fib_count][cur_index] = (double)greater_rank/population.size();
-                result.greater_dir[fib_count][cur_index] = findex[fib][cur_index];
-                ++greater_fib_count[cur_index];
-                if(result.greater[fib_count][cur_index] > percentile)
-                    ++total_greater;
-            }
-            if(lesser_rank > (population.size() >> 1)) // lesser
-            {
-                unsigned char fib_count = lesser_fib_count[cur_index];
-                result.lesser[fib_count][cur_index] = (double)lesser_rank/population.size();
-                result.lesser_dir[fib_count][cur_index] = findex[fib][cur_index];
-                ++lesser_fib_count[cur_index];
-                if(result.lesser[fib_count][cur_index] > percentile)
-                    ++total_lesser;
-            }
-            ++total;
-        }
-    }
-}
-bool vbc_database::single_subject_analysis(const char* filename,float percentile,fib_data& result)
-{
-    std::vector<float> cur_subject_data;
-    if(!get_odf_profile(filename,cur_subject_data))
-        return false;
-    single_subject_analysis(&cur_subject_data[0],percentile,result);
-    return true;
-}
-
-void vbc_database::run_track(const fiber_orientations& fib,std::vector<std::vector<float> >& tracks)
+void vbc_database::run_track(const fiber_orientations& fib,std::vector<std::vector<float> >& tracks,float seed_ratio)
 {
     std::vector<image::vector<3,short> > seed;
     for(image::pixel_index<3> index;index.is_valid(dim);index.next(dim))
@@ -459,42 +392,19 @@ void vbc_database::run_track(const fiber_orientations& fib,std::vector<std::vect
         tracks.clear();
         return;
     }
-    ThreadData tracking_thread(0);
+    ThreadData tracking_thread(false);
     tracking_thread.param.step_size = 1.0; // fixed 1 mm
     tracking_thread.param.smooth_fraction = 0;
     tracking_thread.param.min_points_count3 = 6;
     tracking_thread.param.max_points_count3 = std::max<unsigned int>(6,3.0*500/tracking_thread.param.step_size);
     tracking_thread.tracking_method = 0;// streamline fiber tracking
-    tracking_thread.initial_direction = 1;// random directions
+    tracking_thread.initial_direction = 0;// main directions
     tracking_thread.interpolation_strategy = 0; // trilinear interpolation
     tracking_thread.stop_by_tract = 0;// stop by seed
     tracking_thread.center_seed = 0;// subvoxel seeding
     tracking_thread.setRegions(fib.dim,seed,3);
-    tracking_thread.run(fib,1,seed.size()*100,true);
-    tracks.swap(tracking_thread.track_buffer);
-}
-bool vbc_database::save_track_as(const char* file_name,std::vector<std::vector<float> >& track,unsigned int length_threshold)
-{
-    std::vector<std::vector<float> > new_track;
-    for(unsigned int j = 0; j < track.size();++j)
-    {
-        if(track[j].size() > 3 && track[j].size()/3-1 > length_threshold)
-        {
-            new_track.push_back(std::vector<float>());
-            new_track.back().swap(track[j]);
-        }
-    }
-    if(new_track.empty())
-    {
-        std::string null_name(file_name);
-        null_name += ".no_tracks.txt";
-        std::ofstream out(null_name.c_str());
-        out << std::endl;
-        return true;
-    }
-    TractModel tract_model(handle.get());
-    tract_model.add_tracts(new_track);
-    return tract_model.save_tracts_to_file(file_name);
+    tracking_thread.run(fib,1,seed.size()*seed_ratio,true);
+    tracking_thread.track_buffer.swap(tracks);
 }
 
 void cal_hist(const std::vector<std::vector<float> >& track,std::vector<unsigned int>& dist)
@@ -512,84 +422,26 @@ void cal_hist(const std::vector<std::vector<float> >& track,std::vector<unsigned
     }
 }
 
-/*
-
-void hist_to_dist(const std::vector<unsigned int>& count,
-                  std::vector<float>& dist)
-{
-    dist.resize(count.size());
-    std::copy(count.begin(),count.end(),dist.begin());
-    std::for_each(dist.begin(),dist.end(),boost::lambda::_1 /=
-            std::accumulate(dist.begin(),dist.end(),0.0f));
-}
-
-void dist_to_cdf(std::vector<float>& dist)
-{
-    float sum = 1.0;
-    for(unsigned int index = 0;index < dist.size();++index)
-    {
-        float value = dist[index];
-        dist[index] = sum;
-        sum -= value;
-        if(sum < 0.0)
-            sum = 0.0;
-    }
-}
-
-*/
-
-
-bool vbc_database::save_subject_distribution(float percentile,
-                               unsigned int length_threshold,
-                               const char* file_name,
-                               const fib_data& data)
-{
-    std::vector<std::vector<float> > tracks;
-    fiber_orientations fib;
-    fib.read(handle->fib_data);
-    fib.threshold = percentile;
-    fib.cull_cos_angle = std::cos(60 * 3.1415926 / 180.0);
-
-    fib.fa = data.greater_ptr;
-    fib.findex = data.greater_dir_ptr;
-
-    run_track(fib,tracks);
-    {
-        std::ostringstream out;
-        out << file_name << ".g" << length_threshold << ".trk";
-        if(!save_track_as(out.str().c_str(),tracks,length_threshold))
-        {
-            error_msg = "Cannot save trk file ";
-            error_msg += out.str();
-            return false;
-        }
-    }
-
-    fib.fa = data.lesser_ptr;
-    fib.findex = data.lesser_dir_ptr;
-
-    run_track(fib,tracks);
-    {
-        std::ostringstream out;
-        out << file_name << ".l" << length_threshold << ".trk";
-        if(!save_track_as(out.str().c_str(),tracks,length_threshold))
-        {
-            error_msg = "Cannot save trk file ";
-            error_msg += out.str();
-            return false;
-        }
-    }
-    return true;
-}
-void vbc_database::calculate_individual_affected_tracks(fib_data& data,float percentile,
+bool vbc_database::calculate_individual_affected_tracks(const char* file_name,
                                                         std::vector<std::vector<std::vector<float> > >& greater,
                                                         std::vector<std::vector<std::vector<float> > >& lesser)
 {
+    fib_data data;
+    std::vector<float> cur_subject_data;
+    if(!get_odf_profile(file_name,cur_subject_data))
+    {
+        error_msg = "Cannot read subject file ";
+        error_msg += file_name;
+        return false;
+    }
+    std::vector<unsigned int> resample;
+    calculate_percentile(&cur_subject_data[0],resample,data);
+
     std::vector<std::vector<float> > greater_tracks;
     std::vector<std::vector<float> > lesser_tracks;
     fiber_orientations fib;
-    fib.read(handle->fib_data);
-    fib.threshold = percentile;
+    fib.read(*handle);
+    fib.threshold = tracking_threshold;
     fib.cull_cos_angle = std::cos(60 * 3.1415926 / 180.0);
     fib.fa = data.greater_ptr;
     fib.findex = data.greater_dir_ptr;
@@ -622,78 +474,9 @@ void vbc_database::calculate_individual_affected_tracks(fib_data& data,float per
             lesser.resize(pos+1);
         lesser[pos].push_back(lesser_tracks[index]);
     }
-}
-
-bool vbc_database::calculate_individual_distribution(float percentile,
-                                                unsigned int length_threshold,
-                                                const std::vector<std::string>& files,
-                                                std::vector<unsigned int>& subject_greater,
-                                                std::vector<unsigned int>& subject_lesser)
-{
-    begin_prog("processing");
-    std::vector<std::vector<float> > tracks;
-    subject_greater.clear();
-    subject_greater.resize(200);
-    subject_lesser.clear();
-    subject_lesser.resize(200);
-
-    fib_data data;
-    fiber_orientations fib;
-    fib.read(handle->fib_data);
-    fib.threshold = percentile;
-    fib.cull_cos_angle = std::cos(60 * 3.1415926 / 180.0);
-    total_greater = 0;
-    total_lesser = 0;
-    total = 0;
-    bool is_null = files.empty();
-    unsigned int total_subject = is_null? subject_qa.size() : files.size();
-    for(unsigned int main_index = 0;check_prog(main_index,total_subject);++main_index)
-    {
-        if(!is_null)
-        {
-            std::vector<float> cur_subject_data;
-            if(!get_odf_profile(files[main_index].c_str(),cur_subject_data))
-                return false;
-            single_subject_analysis(&cur_subject_data[0],percentile,data);
-            //single_subject_analysis(subject_qa[rand()%subject_qa.size()],percentile,data);
-        }
-        else
-            single_subject_analysis(subject_qa[main_index],percentile,data);
-
-        fib.fa = data.greater_ptr;
-        fib.findex = data.greater_dir_ptr;
-        run_track(fib,tracks);
-        if(!is_null && length_threshold)
-        {
-            std::ostringstream out;
-            out << files[main_index] << ".g" << length_threshold << ".trk";
-            if(!save_track_as(out.str().c_str(),tracks,length_threshold))
-            {
-                error_msg = "Cannot save trk file ";
-                error_msg += out.str();
-                return false;
-            }
-        }
-        cal_hist(tracks,subject_greater);
-
-        fib.fa = data.lesser_ptr;
-        fib.findex = data.lesser_dir_ptr;
-        run_track(fib,tracks);
-        if(!is_null && length_threshold)
-        {
-            std::ostringstream out;
-            out << files[main_index] << ".l" << length_threshold << ".trk";
-            if(!save_track_as(out.str().c_str(),tracks,length_threshold))
-            {
-                error_msg = "Cannot save trk file ";
-                error_msg += out.str();
-                return false;
-            }
-        }
-        cal_hist(tracks,subject_lesser);
-    }
     return true;
 }
+
 bool stat_model::pre_process(void)
 {
     switch(type)
@@ -704,36 +487,47 @@ bool stat_model::pre_process(void)
             if(label[index])
                 ++group2_count;
         group1_count = label.size()-group2_count;
-        return true;
+        return group2_count > 3 && group1_count > 3;
     case 1: // multiple regression
         return mr.set_variables(&*X.begin(),feature_count,X.size()/feature_count);
     }
     return false;
 }
-bool stat_model::resample(const stat_model& rhs,const std::vector<unsigned int>& permu)
+bool stat_model::resample(const stat_model& rhs,std::vector<unsigned int>& permu,bool null)
 {
     type = rhs.type;
-    switch(type)
+    feature_count = rhs.feature_count;
+    study_feature = rhs.study_feature;
+    unsigned int trial = 0;
+    do
     {
-    case 0: // group
-        label.reserve(permu.size());
-        for(unsigned int index = 0;index < permu.size();++index)
-            label[index] = rhs.label[permu[index]];
-        return pre_process();
-    case 1: // multiple regression
+        if(trial > 100)
+            throw std::runtime_error("Invalid subject demographics for multiple regression");
+        ++trial;
+
+        switch(type)
         {
-            feature_count = rhs.feature_count;
-            study_feature = rhs.study_feature;
+        case 0: // group
+            permu.resize(rhs.label.size());
+            label.resize(rhs.label.size());
+            for(unsigned int index = 0;index < rhs.label.size();++index)
+                label[index] = rhs.label[permu[index] = rhs.rand_gen(rhs.label.size())];
+            break;
+        case 1: // multiple regression
+            permu.resize(rhs.X.size()/rhs.feature_count);
             X.resize(rhs.X.size());
             for(unsigned int index = 0,pos = 0;index < permu.size();++index,pos += feature_count)
             {
-                unsigned int p = permu[index];
-                std::copy(rhs.X.begin()+p*feature_count,rhs.X.begin()+p*feature_count+feature_count,X.begin()+pos);
+                permu[index] = rhs.rand_gen(permu.size());
+                std::copy(rhs.X.begin()+permu[index]*feature_count,
+                          rhs.X.begin()+permu[index]*feature_count+feature_count,X.begin()+pos);
             }
-            return pre_process();
+            break;
         }
-    }
-    return false;
+    }while(!pre_process());
+    if(null)
+        std::random_shuffle(permu.begin(),permu.end(),rhs.rand_gen);
+    return true;
 }
 
 double stat_model::operator()(const std::vector<double>& population) const
@@ -748,12 +542,13 @@ double stat_model::operator()(const std::vector<double>& population) const
         double sum_sq1 = 0.0;
         double sum_sq2 = 0.0;
         for(unsigned int index = 0;index < population.size();++index)
-            if(label[index]) // group 2
+            if(label[index]) // group 1
             {
                 sum2 += population[index];
                 sum_sq2 += population[index]*population[index];
             }
             else
+                // group 0
             {
                 sum1 += population[index];
                 sum_sq1 += population[index]*population[index];
@@ -766,6 +561,7 @@ double stat_model::operator()(const std::vector<double>& population) const
         v *= v;
         v /= (v1*v1/(((double)group1_count)-1.0) + v2*v2/(((double)group2_count)-1.0));
         t_stat = (mean1 - mean2) / std::sqrt(v1+v2);
+        // t_stat > 0 if group 0 > group 1
         }
         break;
     case 1: // multiple regression
@@ -780,6 +576,71 @@ double stat_model::operator()(const std::vector<double>& population) const
     return t_stat;
 }
 
+void vbc_database::calculate_percentile(const float* cur_subject_data,const std::vector<unsigned int>& resample,fib_data& data)
+{
+    data.initialize(handle.get());
+    std::vector<unsigned char> greater_fib_count(dim.size()),lesser_fib_count(dim.size());
+    std::vector<float> population;
+
+    for(unsigned int s_index = 0;s_index < si2vi.size();++s_index)
+    {
+        unsigned int cur_index = si2vi[s_index];
+        for(unsigned int fib = 0,fib_offset = 0;
+            fib < num_fiber && fa[fib][cur_index] > fiber_threshold;
+                ++fib,fib_offset+=si2vi.size())
+        {
+            unsigned int pos = s_index + fib_offset;
+            float cur_value = cur_subject_data[pos];
+            if(cur_value == 0.0)
+                continue;
+
+            population.clear();
+            if(resample.empty())
+            {
+                for(unsigned int subject_id = 0;subject_id < subject_qa.size();++subject_id)
+                {
+                    float value = subject_qa[subject_id][pos];
+                    if(value != 0.0)
+                        population.push_back(value);
+                }
+            }
+            else
+            {
+                for(unsigned int subject_id = 0;subject_id < subject_qa.size();++subject_id)
+                {
+                    float value = subject_qa[resample[subject_id]][pos];
+                    if(value != 0.0)
+                        population.push_back(value);
+                }
+            }
+            unsigned int greater_rank = 0;
+            unsigned int lesser_rank = 0;
+            for(unsigned int subject_id = 0;subject_id < population.size();++subject_id)
+            {
+                if(cur_value > population[subject_id])
+                    ++greater_rank;
+                if(cur_value < population[subject_id])
+                    ++lesser_rank;
+            }
+            if(population.empty())
+                continue;
+            if(greater_rank > (population.size() >> 1)) // greater
+            {
+                unsigned char fib_count = greater_fib_count[cur_index];
+                data.greater[fib_count][cur_index] = (double)greater_rank/population.size();
+                data.greater_dir[fib_count][cur_index] = findex[fib][cur_index];
+                ++greater_fib_count[cur_index];
+            }
+            if(lesser_rank > (population.size() >> 1)) // lesser
+            {
+                unsigned char fib_count = lesser_fib_count[cur_index];
+                data.lesser[fib_count][cur_index] = (double)lesser_rank/population.size();
+                data.lesser_dir[fib_count][cur_index] = findex[fib][cur_index];
+                ++lesser_fib_count[cur_index];
+            }
+        }
+    }
+}
 void vbc_database::calculate_spm(const stat_model& info,fib_data& data,const std::vector<unsigned int>& permu)
 {
     data.initialize(handle.get());
@@ -799,14 +660,14 @@ void vbc_database::calculate_spm(const stat_model& info,fib_data& data,const std
                 continue;
             double t_stat = info(selected_population);
 
-            if(t_stat > 0.0) // group 1 > group 2
+            if(t_stat > 0.0) // group 0 > group 1
             {
                 unsigned char fib_count = greater_fib_count[cur_index];
                 data.greater[fib_count][cur_index] = t_stat;
                 data.greater_dir[fib_count][cur_index] = findex[fib][cur_index];
                 ++greater_fib_count[cur_index];
             }
-            if(t_stat < 0.0) // group 1 < group 2
+            if(t_stat < 0.0) // group 0 < group 1
             {
                 unsigned char fib_count = lesser_fib_count[cur_index];
                 data.lesser[fib_count][cur_index] = -t_stat;
@@ -817,109 +678,159 @@ void vbc_database::calculate_spm(const stat_model& info,fib_data& data,const std
     }
 }
 
-void vbc_database::calculate_subject_distribution(float percentile,const fib_data& data,
-                                                  std::vector<unsigned int>& subject_greater,
-                                                  std::vector<unsigned int>& subject_lesser)
+
+bool vbc_database::read_subject_data(const std::vector<std::string>& files,std::vector<std::vector<float> >& data)
 {
-    // calculate subject fiber distribution
-    std::vector<std::vector<float> > tracks;
-
-    fiber_orientations fib;
-    fib.read(handle->fib_data);
-    fib.threshold = percentile;
-    fib.cull_cos_angle = std::cos(60 * 3.1415926 / 180.0);
-
-    fib.fa = data.greater_ptr;
-    fib.findex = data.greater_dir_ptr;
-
-    run_track(fib,tracks);
-    subject_greater.clear();
-    subject_greater.resize(200);
-    cal_hist(tracks,subject_greater);
-
-
-    fib.fa = data.lesser_ptr;
-    fib.findex = data.lesser_dir_ptr;
-
-    run_track(fib,tracks);
-    subject_lesser.clear();
-    subject_lesser.resize(200);
-    cal_hist(tracks,subject_lesser);
-
+    begin_prog("reading");
+    data.resize(files.size());
+    for(unsigned int index = 0;check_prog(index,files.size());++index)
+        if(!get_odf_profile(files[index].c_str(),data[index]))
+        {
+            error_msg = "Cannot read file ";
+            error_msg += files[index];
+            check_prog(0,0);
+            return false;
+        }
+    return true;
 }
 
-
-void vbc_database::calculate_length_dist_multithread(unsigned int id,
-                                      const stat_model& info,bool null,
-                                      std::vector<unsigned int>& dist_greater,
-                                      std::vector<unsigned int>& dist_lesser,
-                                      bool progress,
-                                      unsigned int* total_count)
+void vbc_database::run_permutation_multithread(unsigned int id)
 {
     fib_data data;
     fiber_orientations fib;
-    fib.read(handle->fib_data);
-    fib.threshold = t_threshold;
+    fib.read(*handle);
+    fib.threshold = tracking_threshold;
     fib.cull_cos_angle = std::cos(60 * 3.1415926 / 180.0);
-
-    boost::mt19937 generator(id);
-    boost::uniform_int<int> uniform_rand(0,info.subject_index.size()-1);
-    boost::variate_generator<boost::mt19937&, boost::uniform_int<int> > rand_gen(generator,uniform_rand);
-
-    std::vector<unsigned int> permu(info.subject_index);
-
     std::vector<std::vector<float> > tracks;
-    for(;*total_count < permutation_count;++(*total_count))
+    bool null = true;
+    unsigned int num_subject = std::max<int>(1,individual_data.size());
+    while(total_count < permutation_count && !terminated)
     {
-        if(progress)
-            check_prog(*total_count,permutation_count);
-        if(prog_aborted())
-            break;
-
         if(null)
-        {
-            std::random_shuffle(permu.begin(),permu.end());
-            calculate_spm(info,data,permu);
-        }
+            ++total_count_null;
         else
+            ++total_count;
+
+        for(unsigned int subject_id = 0;subject_id < num_subject && !terminated;++subject_id)
         {
-            stat_model resampled_info;
-            unsigned int trial = 0;
-            std::vector<unsigned int> id(permu.size());
-            do
+            // multiple regression or group analysis
+            if(individual_data.empty())
             {
-                if(trial > 100)
-                    throw std::runtime_error("Invalid subject demography for permutation test");
-                ++trial;
-                for(unsigned int index = 0;index < permu.size();++index)
-                    permu[index] = info.subject_index[id[index] = rand_gen()];
-            }while(!resampled_info.resample(info,id));
-            calculate_spm(resampled_info,data,permu);
+                std::vector<unsigned int> permu;
+                stat_model resampled_info;
+                {
+                    boost::mutex::scoped_lock lock(lock_resampling);
+                    resampled_info.resample(model,permu,null);
+                }
+                calculate_spm(resampled_info,data,permu);
+            }
+            else
+            // indivividual analysis
+            {
+                std::vector<unsigned int> resample(200);
+                unsigned int random_subject_id = 0;
+                {
+                    boost::mutex::scoped_lock lock(lock_resampling);
+                    random_subject_id = model.rand_gen(subject_qa.size());
+                    for(unsigned int index = 0;index < resample.size();++index)
+                        resample[index] = model.rand_gen(subject_qa.size());
+                }
+                if(null)
+                    calculate_percentile(subject_qa[random_subject_id],resample,data);
+                else
+                    calculate_percentile(&(individual_data[subject_id][0]),resample,data);
+            }
+
+
+            fib.fa = data.lesser_ptr;
+            fib.findex = data.lesser_dir_ptr;
+            run_track(fib,tracks,10.0/permutation_count);
+            if(null)
+                cal_hist(tracks,subject_lesser_null);
+            else
+            {
+                cal_hist(tracks,subject_lesser);
+                {
+                    boost::mutex::scoped_lock lock(lock_lesser_tracks);
+                    lesser_tracks[subject_id].add_tracts(tracks,length_threshold);
+                    tracks.clear();
+                }
+            }
+
+            fib.fa = data.greater_ptr;
+            fib.findex = data.greater_dir_ptr;
+            run_track(fib,tracks,10.0/permutation_count);
+            if(null)
+                cal_hist(tracks,subject_greater_null);
+            else
+            {
+                cal_hist(tracks,subject_greater);
+                {
+                    boost::mutex::scoped_lock lock(lock_greater_tracks);
+                    greater_tracks[subject_id].add_tracts(tracks,length_threshold);
+                    tracks.clear();
+                }
+            }
+            }
+
+        null = !null;
+    }
+}
+void vbc_database::clear_thread(void)
+{
+    if(threads.get())
+    {
+        terminated = true;
+        threads->join_all();
+        threads.reset(0);
+    }
+}
+void vbc_database::save_tracks_files(void)
+{
+    threads->join_all();
+    if(trk_file_names.size() != greater_tracks.size())
+        throw std::runtime_error("Please assign file name for saving trk files.");
+    for(unsigned int index = 0;index < greater_tracks.size();++index)
+    {
+        if(fdr_greater[length_threshold] < 0.2)
+        {
+            for(unsigned int j = 0;j < pruning;++j)
+            {
+                unsigned int track_count = greater_tracks[index].get_visible_track_count();
+                greater_tracks[index].trim();
+                if(track_count == greater_tracks[index].get_visible_track_count())
+                    break;
+            }
+            if(greater_tracks[index].get_visible_track_count())
+            {
+                std::ostringstream out1;
+                out1 << trk_file_names[index] << ".greater" << length_threshold << ".trk.gz";
+                greater_tracks[index].save_tracts_to_file(out1.str().c_str());
+            }
         }
-
-
-        fib.fa = data.lesser_ptr;
-        fib.findex = data.lesser_dir_ptr;
-        run_track(fib,tracks);
-        cal_hist(tracks,dist_lesser);
-
-        fib.fa = data.greater_ptr;
-        fib.findex = data.greater_dir_ptr;
-        run_track(fib,tracks);
-        cal_hist(tracks,dist_greater);
-
-
+        if(fdr_lesser[length_threshold] < 0.2)
+        {
+            for(unsigned int j = 0;j < pruning;++j)
+            {
+                unsigned int track_count = lesser_tracks[index].get_visible_track_count();
+                lesser_tracks[index].trim();
+                if(track_count == lesser_tracks[index].get_visible_track_count())
+                    break;
+            }
+            if(lesser_tracks[index].get_visible_track_count())
+            {
+                std::ostringstream out2;
+                out2 << trk_file_names[index] << ".lesser" << length_threshold << ".trk.gz";
+                lesser_tracks[index].save_tracts_to_file(out2.str().c_str());
+            }
+        }
     }
 }
 
-void vbc_database::calculate_length_distribution(const stat_model& info,
-                                               std::vector<unsigned int>& subject_greater_null,
-                                               std::vector<unsigned int>& subject_lesser_null,
-                                               std::vector<unsigned int>& subject_greater,
-                                               std::vector<unsigned int>& subject_lesser,
-                                               unsigned int thread_count)
+void vbc_database::run_permutation(unsigned int thread_count)
 {
-    begin_prog("processing");
+    clear_thread();
+    terminated = false;
     subject_greater_null.clear();
     subject_greater_null.resize(200);
     subject_lesser_null.clear();
@@ -928,34 +839,55 @@ void vbc_database::calculate_length_distribution(const stat_model& info,
     subject_greater.resize(200);
     subject_lesser.clear();
     subject_lesser.resize(200);
+    fdr_greater.clear();
+    fdr_greater.resize(200);
+    fdr_lesser.clear();
+    fdr_lesser.resize(200);
 
-    boost::thread_group threads;
-    unsigned int total_count_null = 0;
-    unsigned int total_count = 0;
-    for(unsigned int index = 0;index < thread_count-1;++index)
+    model.generator.seed(0);
+    total_count_null = 0;
+    total_count = 0;
+    greater_tracks.clear();
+    lesser_tracks.clear();
+    unsigned int num_subjects = individual_data.empty() ? 1 : individual_data.size();
+    for(unsigned int index = 0;index < num_subjects;++index)
     {
-        // null distribution
-        threads.add_thread(new boost::thread(&vbc_database::calculate_length_dist_multithread,this,
-                                              index,info,true,
-                                             boost::ref(subject_greater_null),
-                                             boost::ref(subject_lesser_null),false,&total_count_null));
-
-        threads.add_thread(new boost::thread(&vbc_database::calculate_length_dist_multithread,this,
-                                             index,info,false,
-                                             boost::ref(subject_greater),
-                                             boost::ref(subject_lesser),false,&total_count));
+        greater_tracks.push_back(new TractModel(handle.get()));
+        lesser_tracks.push_back(new TractModel(handle.get()));
     }
-    // null distribution
-    threads.add_thread(new boost::thread(&vbc_database::calculate_length_dist_multithread,this,
-                                         thread_count-1,info,true,
-                                         boost::ref(subject_greater_null),
-                                         boost::ref(subject_lesser_null),false,&total_count_null));
+    threads.reset(new boost::thread_group);
+    for(unsigned int index = 0;index < thread_count;++index)
+        threads->add_thread(new boost::thread(&vbc_database::run_permutation_multithread,this,index));
+}
+void vbc_database::calculate_FDR(void)
+{
+    float sum1 = std::accumulate(subject_greater_null.begin(),subject_greater_null.end(),0.0);
+    float sum2 = std::accumulate(subject_lesser_null.begin(),subject_lesser_null.end(),0.0);
+    float sum3 = std::accumulate(subject_greater.begin(),subject_greater.end(),0.0);
+    float sum4 = std::accumulate(subject_lesser.begin(),subject_lesser.end(),0.0);
 
-    calculate_length_dist_multithread(thread_count-1,info,false,subject_greater,subject_lesser,true,&total_count);
-    threads.join_all();
-    image::divide_constant(subject_greater_null,total_count_null);
-    image::divide_constant(subject_lesser_null,total_count_null);
-    image::divide_constant(subject_greater,total_count);
-    image::divide_constant(subject_lesser,total_count);
-    check_prog(0,0);
+    // if the null distribution get more findings due to scan parameter differences
+    if(sum1 + sum2 > (sum3 + sum4) * 2.0)
+    {
+        // then normalize it!
+        image::multiply_constant(subject_greater_null.begin(),subject_greater_null.end(),sum1/sum1);
+        image::multiply_constant(subject_lesser_null.begin(),subject_lesser_null.end(),sum1/sum2);
+        image::multiply_constant(subject_greater.begin(),subject_greater.end(),sum1/sum3);
+        image::multiply_constant(subject_lesser.begin(),subject_lesser.end(),sum1/sum4);
+    }
+
+    double sum_greater_null = 0;
+    double sum_lesser_null = 0;
+    double sum_greater = 0;
+    double sum_lesser = 0;
+
+    for(int index = subject_greater_null.size()-1;index >= 0;--index)
+    {
+        sum_greater_null += subject_greater_null[index];
+        sum_lesser_null += subject_lesser_null[index];
+        sum_greater += subject_greater[index];
+        sum_lesser += subject_lesser[index];
+        fdr_greater[index] = (sum_greater > 0.0) ? std::min(1.0,sum_greater_null/sum_greater) : 1.0;
+        fdr_lesser[index] = (sum_lesser > 0.0) ? std::min(1.0,sum_lesser_null/sum_lesser): 1.0;
+    }
 }

@@ -136,6 +136,81 @@ typedef boost::mpl::vector<
 > reprocess_odf;
 
 
+std::pair<unsigned int,unsigned int> evaluate_fib(
+        const image::geometry<3>& dim,
+        const std::vector<std::vector<float> >& fib_fa,
+        const std::vector<std::vector<float> >& fib_dir)
+{
+    unsigned char num_fib = fib_fa.size();
+    char dx[13] = {1,0,0,1,1,0, 1, 1, 0, 1,-1, 1, 1};
+    char dy[13] = {0,1,0,1,0,1,-1, 0, 1, 1, 1,-1, 1};
+    char dz[13] = {0,0,1,0,1,1, 0,-1,-1, 1, 1, 1,-1};
+    std::vector<image::vector<3> > dis(13);
+    for(unsigned int i = 0;i < 13;++i)
+    {
+        dis[i] = image::vector<3>(dx[i],dy[i],dz[i]);
+        dis[i].normalize();
+    }
+    float otsu = image::segmentation::otsu_threshold(fib_fa[0])*0.6;
+    std::vector<std::vector<unsigned char> > connected(fib_fa.size());
+    for(unsigned int index = 0;index < connected.size();++index)
+        connected[index].resize(dim.size());
+    unsigned int connection_count = 0;
+    for(image::pixel_index<3> index;index.is_valid(dim);index.next(dim))
+    {
+        if(fib_fa[0][index.index()] <= otsu)
+            continue;
+        unsigned int index3 = index.index()+index.index()+index.index();
+        for(unsigned char fib1 = 0;fib1 < num_fib;++fib1)
+        {
+            if(fib_fa[fib1][index.index()] <= otsu)
+                break;
+            for(unsigned int j = 0;j < 2;++j)
+            for(unsigned int i = 0;i < 13;++i)
+            {
+                image::vector<3,int> pos;
+                pos = j ? image::vector<3,int>(index[0] + dx[i],index[1] + dy[i],index[2] + dz[i])
+                          :image::vector<3,int>(index[0] - dx[i],index[1] - dy[i],index[2] - dz[i]);
+                if(!dim.is_valid(pos))
+                    continue;
+                image::pixel_index<3> other_index(pos[0],pos[1],pos[2],dim);
+                unsigned int other_index3 = other_index.index()+other_index.index()+other_index.index();
+                if(std::abs(image::vector<3>(&fib_dir[fib1][index3])*dis[i]) <= 0.8665)
+                    continue;
+                for(unsigned char fib2 = 0;fib2 < num_fib;++fib2)
+                    if(fib_fa[fib2][other_index.index()] > otsu &&
+                            std::abs(image::vector<3>(&fib_dir[fib2][other_index3])*dis[i]) > 0.8665)
+                    {
+                        connected[fib1][index.index()] = 1;
+                        connected[fib2][other_index.index()] = 1;
+                        ++connection_count;
+                    }
+            }
+        }
+    }
+    unsigned int no_connection_count = 0;
+    for(image::pixel_index<3> index;index.is_valid(dim);index.next(dim))
+    {
+        for(unsigned int i = 0;i < num_fib;++i)
+            if(fib_fa[i][index.index()] > otsu && !connected[i][index.index()])
+                ++no_connection_count;
+    }
+
+    return std::make_pair(connection_count,no_connection_count);
+}
+
+void flip_fib_dir(std::vector<float>& fib_dir,bool x,bool y,bool z)
+{
+    for(unsigned int j = 0;j+2 < fib_dir.size();j += 3)
+    {
+        if(x)
+            fib_dir[j] = -fib_dir[j];
+        if(y)
+            fib_dir[j+1] = -fib_dir[j+1];
+        if(z)
+            fib_dir[j+2] = -fib_dir[j+2];
+    }
+}
 
 extern "C"
     const char* reconstruction(ImageModel* image_model,unsigned int method_id,const float* param_values)
@@ -143,17 +218,38 @@ extern "C"
     static std::string output_name;
     try
     {
+        {
+            std::vector<unsigned int> shell;
+            if(image_model->voxel.bvalues.front() != 0.0)
+                shell.push_back(0);
+            for(unsigned int index = 1;index < image_model->voxel.bvalues.size();++index)
+                if(std::abs(image_model->voxel.bvalues[index]-image_model->voxel.bvalues[index-1]) > 100)
+                    shell.push_back(index);
+
+            image_model->voxel.half_sphere =
+                    (method_id == 7 || method_id == 4) &&
+                    (shell.size() > 5) && (shell[1] - shell[0] <= 3);
+            image_model->voxel.scheme_balance =
+                    (method_id == 7 || method_id == 4) &&
+                    (shell.size() <= 5) && !shell.empty() &&
+                    image_model->voxel.bvalues.size()-shell.back() < 100;
+        }
+
+
         image_model->voxel.recon_report.clear();
         image_model->voxel.recon_report.str("");
-        image_model->voxel.recon_report
-            << " The in-plane resolution was " << image_model->voxel.vs[0] << " mm."
-            << " The slice thickness was " << image_model->voxel.vs[2] << " mm."
-            << " A total of " << image_model->voxel.bvalues.size()-(image_model->voxel.bvalues.front() == 0 ? 1:0)
-            << " diffusion sampling directions were acquired."
-            << " The b-value was " << image_model->voxel.bvalues.back() << " s/mm2.";
-
         image_model->voxel.param = param_values;
         std::ostringstream out;
+        if(method_id == 1) // DTI
+        {
+            image_model->voxel.need_odf = 0;
+            image_model->voxel.output_jacobian = 0;
+            image_model->voxel.output_mapping = 0;
+            image_model->voxel.scheme_balance = 0;
+            image_model->voxel.half_sphere = 0;
+            image_model->voxel.odf_deconvolusion = 0;
+            image_model->voxel.odf_decomposition = 0;
+        }
         if(method_id != 1) // not DTI
         {
             out << ".odf" << image_model->voxel.ti.fold;// odf_order
@@ -186,18 +282,21 @@ extern "C"
             }
         }
         // correct for b-table orientation
-        if(image_model->voxel.check_btable)
+
         {
             set_title("checking b-table");
             image_model->reconstruct<dti_process>();
-            unsigned int cur_score = image_model->voxel.evaluate_fib();
-            image_model->voxel.flip_fib_dir(true,false,false);
-            unsigned int flip_x_score = image_model->voxel.evaluate_fib();
-            image_model->voxel.flip_fib_dir(true,true,false);
-            unsigned int flip_y_score = image_model->voxel.evaluate_fib();
-            image_model->voxel.flip_fib_dir(false,true,true);
-            unsigned int flip_z_score = image_model->voxel.evaluate_fib();
-
+            std::vector<std::vector<float> > fib_fa(1);
+            std::vector<std::vector<float> > fib_dir(1);
+            fib_fa[0].swap(image_model->voxel.fib_fa);
+            fib_dir[0].swap(image_model->voxel.fib_dir);
+            unsigned int cur_score = evaluate_fib(image_model->voxel.dim,fib_fa,fib_dir).first;
+            flip_fib_dir(fib_dir[0],true,false,false);
+            unsigned int flip_x_score = evaluate_fib(image_model->voxel.dim,fib_fa,fib_dir).first;
+            flip_fib_dir(fib_dir[0],true,true,false);
+            unsigned int flip_y_score = evaluate_fib(image_model->voxel.dim,fib_fa,fib_dir).first;
+            flip_fib_dir(fib_dir[0],false,true,true);
+            unsigned int flip_z_score = evaluate_fib(image_model->voxel.dim,fib_fa,fib_dir).first;
             if(flip_x_score > cur_score &&
                flip_x_score > flip_y_score && flip_x_score > flip_z_score)
             {
@@ -221,6 +320,7 @@ extern "C"
             }
 
         }
+
 
 
 
@@ -386,7 +486,6 @@ extern "C"
     image::basic_image<unsigned char,3> mask;
     std::vector<std::vector<float> > odfs;
     begin_prog("averaging");
-    can_cancel(true);
     unsigned int half_vertex_count = 0;
     unsigned int row,col;
     float mni[16]={0};
@@ -555,7 +654,7 @@ extern "C"
             odfs[odf_index][j] /= (double)num_files;
 
     std::ostringstream out;
-    out << report.c_str() << " A group average template was constructed from a total of " << num_files << " subjects.";
+    out << "A group average template was constructed from a total of " << num_files << " subjects." << report.c_str();
     report = out.str();
     output_odfs(mask,out_name,".mean.odf.fib.gz",odfs,ti,vs,mni,report);
     output_odfs(mask,out_name,".mean.fib.gz",odfs,ti,vs,mni,report,false);

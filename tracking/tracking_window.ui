@@ -989,6 +989,7 @@
     <addaction name="actionSave_Camera"/>
     <addaction name="separator"/>
     <addaction name="actionSave_Screen"/>
+    <addaction name="actionSave_3D_screen_in_3_views"/>
     <addaction name="actionSave_3D_screen_in_high_resolution"/>
     <addaction name="actionSave_ROI_Screen"/>
     <addaction name="actionSave_Anisotrpy_Map_as"/>
@@ -1022,6 +1023,7 @@
     <addaction name="actionRestore_Settings"/>
     <addaction name="actionManual_Registration"/>
     <addaction name="actionView_FIB_Content"/>
+    <addaction name="actionQuality_Assessment"/>
    </widget>
    <addaction name="menu_Edit"/>
    <addaction name="menuRegions"/>
@@ -2606,7 +2608,7 @@
   </action>
   <action name="actionView_FIB_Content">
    <property name="text">
-    <string>View FIB Content</string>
+    <string>View FIB Content...</string>
    </property>
   </action>
   <action name="actionPublish_or_perish">
@@ -2617,6 +2619,20 @@
   <action name="actionMethod_Report">
    <property name="text">
     <string>Method Report...</string>
+   </property>
+  </action>
+  <action name="actionQuality_Assessment">
+   <property name="text">
+    <string>Quality Assessment...</string>
+   </property>
+  </action>
+  <action name="actionSave_3D_screen_in_3_views">
+   <property name="icon">
+    <iconset resource="../icons.qrc">
+     <normaloff>:/icons/icons/save.xpm</normaloff>:/icons/icons/save.xpm</iconset>
+   </property>
+   <property name="text">
+    <string>Save 3D screen in 3 views...</string>
    </property>
   </action>
  </widget>
